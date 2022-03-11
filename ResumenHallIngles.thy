@@ -26,7 +26,6 @@ primrec disjunction_atomic :: "'b list \<Rightarrow>'a \<Rightarrow> ('a \<times
  "disjunction_atomic [] i = FF"   
 | "disjunction_atomic (x#D) i = (atom (i, x)) \<or>. (disjunction_atomic D i)"
 
-(* Mover para otra teoria*)
 
 lemma t_v_evaluation_disjunctions1:
   assumes "t_v_evaluation I (disjunction_atomic (a # l) i) = Ttrue"
