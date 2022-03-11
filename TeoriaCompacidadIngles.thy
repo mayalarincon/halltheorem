@@ -8,20 +8,7 @@ begin
 (*>*)
 section \<open> Teorema de compacidad \<close>
 
-text \<open>  
-  La demostración del Teorema de Compacidad que se presenta en los textos
-  clásicos de introducción a la lógica utiliza el {\em Lema de
-  König}. El Teorema de Existencia de Modelos  permite otra forma de
-  demostrar este resultado.
 
- \begin{teorema}[Teorema de Existencia de Modelos (3.6.2 en \cite{Fitting})]\label{ConjuntosatisfiableP}
-  Sea $L$ un lenguaje proposicional enumerable. Si $\mathcal{C}$
-  es una propiedad de consistencia proposicional y $S\in \mathcal{C}$,
-  entonces $S$ es satisfiable.
-  \end{teorema}
-
-La formalización en Isabelle es la siguiente.
-\<close>
 text\<open>
 %
 \begin{isabellebody}%
