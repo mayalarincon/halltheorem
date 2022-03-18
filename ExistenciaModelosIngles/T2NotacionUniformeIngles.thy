@@ -15,7 +15,7 @@ text \<open>
   procedimientos utilizados en la prueba automática de teoremas, pueden
   describirse de manera mucho más simple. En esta sección formalizamos
   este concepto dividiendo las fórmulas proposicionales en cuatro tipos
-  de fórmulas: {\em literales} (\ref{literal}), {\em dobles negaciones}
+  de fórmulas: {\em literales} (\ref{literal}), {\em dobles negationes}
   (\ref{NoNO}), {\em fórmulas alfa} (\ref{alfa}) y {\em fórmulas beta}
   (\ref{beta}); y definiendo el tipo {\em tipoNotaciónUniforme}
   (\ref{tipoformula}) con estos cuatro t_v_evaluationes.  Los si\-guientes lemas
@@ -35,8 +35,8 @@ fun FormulaLiteral :: "'b formula \<Rightarrow> bool" where
 | "FormulaLiteral (\<not>. FF) = True"
 | "FormulaLiteral TT = True"
 | "FormulaLiteral (\<not>. TT) = True"
-| "FormulaLiteral (Atomo P) = True" 
-| "FormulaLiteral (\<not>.(Atomo P)) = True" 
+| "FormulaLiteral (atom P) = True" 
+| "FormulaLiteral (\<not>.(atom P)) = True" 
 | "FormulaLiteral F = False"
 
 text \<open>
@@ -94,7 +94,7 @@ text \<open>
 
 lemma Literal:
   assumes "FormulaLiteral F"
-  shows "F = FF \<or> F = TT \<or> F = (\<not>. FF) \<or> F = (\<not>. TT) \<or> (\<exists>n. F = (Atomo n) \<or> F = (\<not>. (Atomo n)))"
+  shows "F = FF \<or> F = TT \<or> F = (\<not>. FF) \<or> F = (\<not>. TT) \<or> (\<exists>n. F = (atom n) \<or> F = (\<not>. (atom n)))"
 using assms 
 by (induct F rule: FormulaLiteral.induct, auto) 
 
@@ -145,7 +145,7 @@ text \<open>
   pertenence exactamente a una de las cuatro categorías anteriores.
 
   \begin{lema}
-  Los literales no son dobles negaciones.
+  Los literales no son dobles negationes.
   \end{lema}
 
   \noindent Su formalización es:
@@ -187,7 +187,7 @@ by (induct formula rule: FormulaLiteral.induct, auto)
 
 text \<open>
   \begin{lema}
-  Los fórmulas alfa no son dobles negaciones.
+  Los fórmulas alfa no son dobles negationes.
   \end{lema}
 
   \noindent Su formalización es:
@@ -201,7 +201,7 @@ by (induct formula rule: FormulaAlfa.induct, auto)
 
 text \<open>
   \begin{lema}
-  Los fórmulas beta no son dobles negaciones.
+  Los fórmulas beta no son dobles negationes.
   \end{lema}
 
   \noindent Su formalización es:
@@ -418,11 +418,11 @@ text \<open>
  \end{nota}
 \<close>
 
-section \<open> Disyunciones y conjunciones generalizadas \<close>
+section \<open> Disyunciones y conjunctiones generalizadas \<close>
 
 text \<open>
   Para facilitar el desarrollo de las formas normales, introducimos las
-  disyunciones y conjunciones generalizadas. 
+  disjunctiones y conjunctiones generalizadas. 
 
   \begin{definicion}
    La \textbf{disyunción generalizada} de las fórmulas $X_1, X_2,\dots, X_n$ es
@@ -440,18 +440,18 @@ text \<open>
   \end{definicion}
 
   En el estudio que sigue estamos interesados en considerar únicamente
-  conjunciones generalizadas de disyunciones generalizadas.
+  conjunctiones generalizadas de disjunctiones generalizadas.
 
   En Isabelle representaremos una conjunción generali\-zada de
-  disyunciones gene\-ralizadas por medio de una lista de elementos del
+  disjunctiones gene\-ralizadas por medio de una lista de elementos del
   tipo disyunción generalizada: @{text "('b formula list) list"}.
 \<close>
 
-subsection \<open> Semántica de las disyunciones y conjunciones generalizadas \<close>
+subsection \<open> Semántica de las disjunctiones y conjunctiones generalizadas \<close>
 
 text\<open>
-  En esta sección extendemos la semántica para incluir las disyunciones
-  y conjunciones generalizadas.  
+  En esta sección extendemos la semántica para incluir las disjunctiones
+  y conjunctiones generalizadas.  
 
   \begin{definicion}
   El \textbf{t_v_evaluation} de una disyunción generalizada $[X_1,\, X_2,\dots , X_n]$ 
@@ -472,7 +472,7 @@ primrec t_v_evaluationDisyuncionG :: "('b \<Rightarrow> v_truth) \<Rightarrow> (
 
 text \<open> 
   \begin{definicion}
-  El \textbf{t_v_evaluation} de una conjunción generalizada de disyunciones
+  El \textbf{t_v_evaluation} de una conjunción generalizada de disjunctiones
   generalizadas $\langle D_1,$ \linebreak
   $D_2, \dots , D_n\rangle$, en una
   interpretación $I$, se define como sigue: 
@@ -494,11 +494,11 @@ primrec t_v_evaluationConjuncionG :: "('b \<Rightarrow> v_truth) \<Rightarrow> (
 
 text \<open> 
   Concluimos esta sección definiendo el concepto de equivalencia ente
-  conjunciones generalizadas y probando las equivalencias entre las
-  fórmulas y conjunciones obtenidas a partir de sus componentes. 
+  conjunctiones generalizadas y probando las equivalencias entre las
+  fórmulas y conjunctiones obtenidas a partir de sus componentes. 
 
   \begin{definicion}
-  Las conjunciones generalizadas $C_1$ y $C_2$ son \textbf{equivalentes}
+  Las conjunctiones generalizadas $C_1$ y $C_2$ son \textbf{equivalentes}
   si para toda interpretación @{text I} el t_v_evaluation de $C_1$ en $I$ es
   igual al t_v_evaluation de $C_2$ en $I$, y se representa por $C_1\equiv C_2$.
   \end{definicion}
@@ -509,7 +509,7 @@ definition equivalentesG :: "('b formula list) list  \<Rightarrow> ('b formula l
  "equivalentesG C1 C2 \<equiv> (\<forall>I. ((t_v_evaluationConjuncionG I C1) = (t_v_evaluationConjuncionG I C2)))" 
 
 text \<open>   Se tienen las siguientes equivalencias con relación a las fórmulas
-  alfa, beta y dobles negaciones, y sus respectivas componentes. 
+  alfa, beta y dobles negationes, y sus respectivas componentes. 
 \<close>
 (*<*) 
 lemma EquiNoNoa: "equivalentesG [[\<not>. \<not>. F]] [[F]]"
@@ -521,11 +521,11 @@ proof (unfold equivalentesG_def)
     proof (cases "t_v_evaluation I F")
       text  \<open> Caso 1:  \<close>          
       { assume 1:"t_v_evaluation I F = Ttrue"        
-        thus ?thesis by (simp add: v_negacion_def) }     
+        thus ?thesis by (simp add: v_negation_def) }     
     next
        text  \<open> Caso 2:  \<close> 
       { assume "t_v_evaluation I F = Ffalse"    
-        thus ?thesis by (simp add: v_negacion_def) }     
+        thus ?thesis by (simp add: v_negation_def) }     
     qed 
   qed
 qed  
@@ -569,15 +569,15 @@ proof (unfold equivalentesG_def)
         thus ?thesis
         proof(cases "t_v_evaluation I H")
           assume  "t_v_evaluation I H = Ttrue"        
-          thus ?thesis using 1  by (simp add: v_conjuncion_def)              
+          thus ?thesis using 1  by (simp add: v_conjunction_def)              
         next 
           assume  "t_v_evaluation I H = Ffalse"        
-          thus ?thesis using 1  by (simp add: v_conjuncion_def)
+          thus ?thesis using 1  by (simp add: v_conjunction_def)
         qed }
     next
        text  \<open> Caso 2:  \<close> 
       { assume "t_v_evaluation I G = Ffalse"    
-        thus ?thesis by (simp add: v_conjuncion_def) }     
+        thus ?thesis by (simp add: v_conjunction_def) }     
     qed 
   qed
 qed  
@@ -597,17 +597,17 @@ proof (unfold equivalentesG_def)
         proof (cases "t_v_evaluation I H")
           assume  "t_v_evaluation I H = Ttrue"        
           thus ?thesis using 1  
-            by (simp add: v_negacion_def, simp add: v_disyuncion_def)
+            by (simp add: v_negation_def, simp add: v_disjunction_def)
         next 
           assume  "t_v_evaluation I H = Ffalse"        
           thus ?thesis using 1  
-            by (simp add: v_negacion_def, simp add: v_disyuncion_def)
+            by (simp add: v_negation_def, simp add: v_disjunction_def)
         qed }
     next
         text  \<open> Caso 2:  \<close> 
       { assume "t_v_evaluation I G = Ffalse"    
         thus ?thesis 
-          by (simp add: v_negacion_def, simp add: v_disyuncion_def) }     
+          by (simp add: v_negation_def, simp add: v_disjunction_def) }     
     qed 
   qed
 qed  
@@ -627,17 +627,17 @@ proof (unfold equivalentesG_def)
         proof(cases "t_v_evaluation I H")
           assume  "t_v_evaluation I H = Ttrue"        
           thus ?thesis using 1  
-            by (simp add: v_negacion_def, simp add: v_implicacion_def)
+            by (simp add: v_negation_def, simp add: v_implication_def)
         next 
           assume  "t_v_evaluation I H = Ffalse"        
           thus ?thesis using 1  
-            by (simp add: v_negacion_def, simp add: v_implicacion_def)
+            by (simp add: v_negation_def, simp add: v_implication_def)
         qed }
     next
         text  \<open> Caso 2:  \<close> 
       { assume "t_v_evaluation I G = Ffalse"    
         thus ?thesis 
-          by (simp add: v_negacion_def, simp add: v_implicacion_def) }     
+          by (simp add: v_negation_def, simp add: v_implication_def) }     
     qed 
   qed
 qed 
@@ -691,17 +691,17 @@ proof (unfold equivalentesG_def)
     proof (cases "t_v_evaluation I G")
         text  \<open> Caso 1:  \<close> 
       { assume 1:"t_v_evaluation I G = Ttrue"        
-        thus ?thesis by (simp add: v_disyuncion_def) }    
+        thus ?thesis by (simp add: v_disjunction_def) }    
     next
         text  \<open> Caso 2:  \<close> 
       { assume 2: "t_v_evaluation I G = Ffalse"  
         thus ?thesis
         proof(cases "t_v_evaluation I H")
           assume  "t_v_evaluation I H = Ttrue"        
-          thus ?thesis by (simp add: v_disyuncion_def)              
+          thus ?thesis by (simp add: v_disjunction_def)              
         next 
           assume  "t_v_evaluation I H = Ffalse"        
-          thus ?thesis using 2 by (simp add: v_disyuncion_def)
+          thus ?thesis using 2 by (simp add: v_disjunction_def)
         qed }
     qed     
   qed
@@ -722,17 +722,17 @@ proof (unfold equivalentesG_def)
         proof(cases "t_v_evaluation I H")
           assume  "t_v_evaluation I H = Ttrue"        
           thus ?thesis using 1  
-            by (simp add: v_negacion_def, simp add: v_conjuncion_def)
+            by (simp add: v_negation_def, simp add: v_conjunction_def)
         next 
           assume  "t_v_evaluation I H = Ffalse"        
           thus ?thesis using 1  
-            by (simp add: v_negacion_def, simp add: v_conjuncion_def)
+            by (simp add: v_negation_def, simp add: v_conjunction_def)
         qed }
     next
          text  \<open> Caso 2:  \<close> 
       { assume "t_v_evaluation I G = Ffalse"    
         thus ?thesis 
-          by (simp add: v_negacion_def, simp add: v_conjuncion_def) }     
+          by (simp add: v_negation_def, simp add: v_conjunction_def) }     
     qed 
   qed
 qed  
@@ -750,17 +750,17 @@ proof (unfold equivalentesG_def)
         proof(cases "t_v_evaluation I H")
           assume  "t_v_evaluation I H = Ttrue"        
           thus ?thesis using 1  
-            by (simp add: v_negacion_def, simp add: v_implicacion_def)
+            by (simp add: v_negation_def, simp add: v_implication_def)
         next 
           assume  "t_v_evaluation I H = Ffalse"        
           thus ?thesis using 1  
-            by (simp add: v_negacion_def, simp add: v_implicacion_def)
+            by (simp add: v_negation_def, simp add: v_implication_def)
         qed }
     next
         text  \<open> Caso 2:  \<close> 
       { assume "t_v_evaluation I G = Ffalse"    
         thus ?thesis 
-          by (simp add: v_negacion_def, simp add: v_implicacion_def) }     
+          by (simp add: v_negation_def, simp add: v_implication_def) }     
     qed 
   qed
 qed  
@@ -806,7 +806,7 @@ qed
  
 text \<open> 
   Se tienen las siguientes equivalencias entre las fórmulas alfa, beta y
-  las dobles negaciones, y sus respectivas componentes.
+  las dobles negationes, y sus respectivas componentes.
 
   \begin{lema}
   Si $F$ es una doble negación y $G$ es su componente, entonces $F \equiv G$.
@@ -905,7 +905,7 @@ proof(unfold equivalentes_def)
          thus "t_v_evaluation I (Comp2 F) = Ttrue" using CasosValor by auto
        qed    
        thus "t_v_evaluation I (Comp1 F \<and>. Comp2 F) = Ttrue" using 3 
-         by (auto, unfold v_conjuncion_def, simp)
+         by (auto, unfold v_conjunction_def, simp)
      qed
      thus "t_v_evaluation I F = t_v_evaluation I (Comp1 F \<and>. Comp2 F)" using hip1 by simp
    next
@@ -936,7 +936,7 @@ proof(unfold equivalentes_def)
              by auto 
          qed
          thus "t_v_evaluation I (Comp1 F \<and>. Comp2 F) = Ffalse" 
-           by (auto, unfold v_conjuncion_def, auto)
+           by (auto, unfold v_conjunction_def, auto)
        qed     
        thus "t_v_evaluation I F = t_v_evaluation I (Comp1 F \<and>. Comp2 F)" using hip2 by simp
      qed
@@ -991,7 +991,7 @@ proof (unfold equivalentes_def)
             by auto
         qed
         thus "t_v_evaluation I (Comp1 F \<or>. Comp2 F) = Ttrue" 
-          by (auto, unfold v_disyuncion_def, auto)
+          by (auto, unfold v_disjunction_def, auto)
       qed     
       thus "t_v_evaluation I F = t_v_evaluation I (Comp1 F \<or>. Comp2 F)" using hip1 by simp
     next
@@ -1018,7 +1018,7 @@ proof (unfold equivalentes_def)
          thus "t_v_evaluation I (Comp2 F) = Ffalse" using CasosValor by auto
        qed    
        thus "t_v_evaluation I (Comp1 F \<or>. Comp2 F) = Ffalse" using 4  
-         by (auto, unfold v_disyuncion_def, simp)
+         by (auto, unfold v_disjunction_def, simp)
      qed
      thus "t_v_evaluation I F = t_v_evaluation I (Comp1 F \<or>. Comp2 F)" using hip2 by simp
    qed 
