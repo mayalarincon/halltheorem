@@ -3,10 +3,8 @@ theory ResumenHallIngles
   Main
   Marriage
 "TeoriaCompacidadIngles"
-
 begin
 
- 
 definition system_representatives :: "('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> bool" where
 "system_representatives S I R  \<equiv> (\<forall>i\<in>I. (R i) \<in> (S i)) \<and> (inj_on R I)"
 
@@ -25,7 +23,6 @@ lemma list_to_set:
 primrec disjunction_atomic :: "'b list \<Rightarrow>'a \<Rightarrow> ('a \<times> 'b)formula"  where
  "disjunction_atomic [] i = FF"   
 | "disjunction_atomic (x#D) i = (atom (i, x)) \<or>. (disjunction_atomic D i)"
-
 
 lemma t_v_evaluation_disjunctions1:
   assumes "t_v_evaluation I (disjunction_atomic (a # l) i) = Ttrue"
@@ -412,7 +409,6 @@ lemma system_distinct_representatives_finite:
   "\<forall>i\<in>I. (S i)\<noteq>{}" and "\<forall>i\<in>I. finite (S i)" and "To \<subseteq> (\<T> S I)"  and "finite To" 
    and "\<forall>J\<subseteq>(indices_set_formulas To). card J \<le> card (\<Union> (S ` J))"
  shows  "\<exists>R. system_representatives S (indices_set_formulas To) R" 
-
 proof- 
   have 1: "finite (indices_set_formulas To)"
     using assms(4) finite_set_indices by auto
