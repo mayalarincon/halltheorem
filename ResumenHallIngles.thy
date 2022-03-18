@@ -38,7 +38,7 @@ proof-
     using assms by auto
   thus ?thesis using ValoresDisyuncion by blast
 qed
-(* El siguiente lema se utiliza más adelante para demostrar el lema  existence_representantsn*)
+
 lemma t_v_evaluation_atom:
   assumes "t_v_evaluation I (disjunction_atomic l i) = Ttrue"
   shows "\<exists>x. x \<in> set l \<and> (t_v_evaluation I (atom (i,x)) = Ttrue)"
@@ -82,10 +82,6 @@ definition \<H> :: "('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow>
 definition \<T> :: "('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow> ('a \<times> 'b)formula set"  where
    "\<T> S I  \<equiv> (\<F> S I) \<union> (\<G> S I) \<union> (\<H> S I)" 
 
-text\<open>
-Definimos en Isabelle el conjunto de índices que ocurren en un conjunto de fórmulas de la siguiente 
-manera.
-\<close>  
 primrec indices_formula :: "('a \<times> 'b)formula  \<Rightarrow> 'a set" where
   "indices_formula FF = {}"
 | "indices_formula TT = {}"
@@ -97,7 +93,6 @@ primrec indices_formula :: "('a \<times> 'b)formula  \<Rightarrow> 'a set" where
 
 definition  indices_set_formulas :: "('a \<times> 'b)formula set  \<Rightarrow> 'a set" where
 "indices_set_formulas S = (\<Union>F\<in> S. indices_formula F)"
-(*<*)
 
 lemma finite_indices_formulas:
   shows "finite (indices_formula F)"
@@ -411,22 +406,13 @@ qed
 lemma all_nonempty_sets1:
   assumes  "\<forall>J\<subseteq>I. finite J \<longrightarrow>  card J \<le> card (\<Union> (S ` J))"
   shows "\<forall>i\<in>I. (S i)\<noteq>{}" using assms by auto
-(*>*)
-text\<open>
-El siguiente lema afirma que  para cualquier
-subconjunto finito de fórmulas $To\subseteq  (\mathcal{T}\, S\, I)$,
-si la correspondiente colección de subconjuntos finitos con índices en el conjunto
-$(indices\text{-}conjunto\text{-}formulas\,\, To)$  sa\-tisface la condición de
-matrimonio, entonces tiene un SDR.
-Para la demostración se utiliza la versión finita del teorema de Hall
-\textcolor{blue}{ \cite{DBLP:conf/cpp/JiangN11}}.
-\<close>
+
 lemma system_distinct_representatives_finite:
   assumes
   "\<forall>i\<in>I. (S i)\<noteq>{}" and "\<forall>i\<in>I. finite (S i)" and "To \<subseteq> (\<T> S I)"  and "finite To" 
    and "\<forall>J\<subseteq>(indices_set_formulas To). card J \<le> card (\<Union> (S ` J))"
  shows  "\<exists>R. system_representatives S (indices_set_formulas To) R" 
-(*<*)
+
 proof- 
   have 1: "finite (indices_set_formulas To)"
     using assms(4) finite_set_indices by auto
@@ -440,19 +426,10 @@ proof-
               inj_on R (indices_set_formulas To)" by auto 
   thus ?thesis by(unfold system_representatives_def, auto)
 qed
-(*>*)
-text\<open>
-El siguiente teorema afirma que si se tiene un sistema de representantes distintos $R$ para una colección
-de conjuntos finitos determinada por $A$ e $\mathcal{I}$, entonces cualquier subconjunto de fórmulas 
- $X\subseteq (\mathcal{T}\, A\,\, \mathcal{I})$ es satisfiable.
-Un model para $X$ es la  siguiente interpretación de fórmulas.
-\<close>
+
 fun Hall_interpretation :: "('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> (('a \<times> 'b) \<Rightarrow> v_truth)"  where
 "Hall_interpretation A \<I> R = (\<lambda>(i,x).(if  i \<in> \<I> \<and> x \<in> (A i) \<and> (R i) = x  then Ttrue else Ffalse))"
 
-(* Traduction:  Verdad/Ttrue, Falso/Ffalse, valor/t_v_evaluation, v_verdad/v_truth *)
-
-(*<*)
 lemma t_v_evaluation_index:
   assumes  "t_v_evaluation (Hall_interpretation S I R) (atom (i,x)) = Ttrue"
   shows  "(R i) = x"
@@ -463,8 +440,6 @@ proof(rule ccontr)
   using non_Ttrue[of "Hall_interpretation S I R" "atom (i,x)"] by auto 
   thus False using assms by simp
 qed
-
-(* Traduction: non_Ttrue/non_Ttrue *)
 
 lemma distinct_elements_distinct_indices:
   assumes "F = \<not>.(atom (i,x) \<and>. atom(i,y))" and "x\<noteq>y"  
@@ -569,17 +544,11 @@ proof-
   thus "t_v_evaluation I F = Ttrue"
     using assms(2-3) disjunctor_Ttrue_in_atomic_disjunctions by auto
 qed
-(*>*)
-
-(* Traduction: satisfiable/satisfiable, model/model,
-    satisfiable_subset/satisfiable_subset,
-    satisfiable_def/satisfiable_def *)
 
 theorem SDR_satisfiable:
   assumes "\<forall>i\<in>\<I>. (A i) \<noteq> {}"  and  "\<forall>i\<in>\<I>. finite (A i)" and  "X \<subseteq> (\<T> A \<I>)"
   and  "system_representatives A \<I> R"  
 shows "satisfiable X"
-(*<*)
 proof- 
   have "satisfiable (\<T> A \<I>)"
   proof-
@@ -646,18 +615,12 @@ proof-
   qed 
   thus "satisfiable X" using satisfiable_subset assms(3) by auto
 qed 
-(*>*)
-text\<open>
-Los anteriores dos resultados permiten demostrar que cualquier
-subconjunto finito de fórmulas  $To\subseteq  (\mathcal{T}\, S\, I)$  tal que
-la correspondiente colección de subconjuntos finitos cumplen la condición de matrimonio, es satisfiable.  
-\<close>
+
 lemma finite_is_satisfiable:
   assumes
   "\<forall>i\<in>I. (S i)\<noteq>{}" and "\<forall>i\<in>I. finite (S i)" and "To \<subseteq> (\<T> S I)"  and  "finite To"
   and "\<forall>J\<subseteq>(indices_set_formulas To). card J \<le> card (\<Union> (S ` J))"
 shows  "satisfiable To"
-(*<*)
 proof- 
   have 0: "\<exists>R. system_representatives S (indices_set_formulas To) R" 
     using assms system_distinct_representatives_finite[of I S To] by auto
@@ -672,18 +635,11 @@ proof-
   thus  "satisfiable To"
     using  1 2 3 0 SDR_satisfiable by auto
 qed
-(*>*)
-text\<open>
-El anterior lemma junto con el Teorema de Compacidad permiten demostrar que el conjunto de fórmulas
-$(\mathcal{T}\, S\, I)$ es satisfiable.
-\<close>
-(*<*)
+
  lemma diag_nat:
   shows "\<forall>y z.\<exists>x. (y,z) = diag x" 
   using enumeration_natxnat by(unfold enumeration_def,auto)
 
-(* Traduction: enumeration/enumeration *)
-(* Change the demonstration *)
 lemma EnumFormulasHall:
   assumes "\<exists>g. enumeration (g:: nat \<Rightarrow>'a)" and "\<exists>h. enumeration (h:: nat \<Rightarrow>'b)"
   shows "\<exists>f. enumeration (f:: nat \<Rightarrow>('a \<times>'b )formula)"
@@ -715,16 +671,13 @@ proof-
   thus "\<exists>f. enumeration (f:: nat \<Rightarrow>('a \<times>'b )formula)" 
     using EnumeracionFormulasP1 by auto 
 qed
-(*>*)
 
-(* Translation:  Compactness_Theorem/Compacteness_Theorem *)
 theorem all_formulas_satisfiable:
   fixes S :: "'a \<Rightarrow> 'b set" and I :: "'a set"
   assumes "\<exists>g. enumeration (g:: nat \<Rightarrow>'a)" and "\<exists>h. enumeration (h:: nat \<Rightarrow>'b)" 
   and "\<forall>i\<in>I. finite (S i)"
   and "\<forall>J\<subseteq>I. finite J \<longrightarrow>  card J \<le> card (\<Union> (S ` J))"
 shows "satisfiable (\<T> S I)"
-(*<*)
 proof- 
   have "\<forall> A. A \<subseteq> (\<T> S I) \<and> (finite A) \<longrightarrow> satisfiable A"
   proof(rule allI, rule impI) 
@@ -762,20 +715,6 @@ qed
        of "(\<T> S I)"]
     by auto
 qed
-(*>*)
-text\<open>
-El siguiente teorema afirma que si $(\mathcal{T}\,  S\, I)$ es satisfiable
- entonces la co\-rrespondiente colección
-de conjuntos finitos  determinada por $S$ e $I$ tiene un sistema de representantes distintos.
-\<close>
-text\<open> Para la demostración se define la siguiente función, 
-\<close>
-fun SDR ::  "(('a \<times> 'b) \<Rightarrow> v_truth) \<Rightarrow> ('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow> ('a \<Rightarrow>'b )"
-  where
-"SDR M S I = (\<lambda>i. (THE x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and> x\<in>(S i)))"
-text\<open> y se demuestra el siguiente lema que formaliza la existencia de tal función.
-\<close>
-(*<*)
 
 lemma existence_representants:
  assumes "i \<in> I" and "M model (\<F> S I)" and "finite(S i)"  
@@ -876,11 +815,10 @@ lemma uniqueness_aux:
   "\<forall>y. y \<in> (S i) \<and> x\<noteq>y \<longrightarrow> (t_v_evaluation M (\<not>.(atom (i,x) \<and>. atom(i,y))) = Ttrue)"
 shows  "(THE a. (t_v_evaluation M (atom (i,a)) = Ttrue) \<and> a\<in>(S i)) = x" 
   using assms  uniqueness_aux1[of M i x ] uniqueness_aux2[of M i x] by blast
-(*>*)
+
 lemma function_SDR:
   assumes "i \<in> I" and "M model (\<F> S I)" and "M model (\<G> S I)" and "finite(S i)"
 shows "\<exists>!x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and>  x \<in> (S i) \<and> SDR M S I i = x" 
-(*<*)
 proof- 
   have  "\<exists>x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and>  x \<in> (S i)" 
     using assms(1-2,4) existence_representants by auto 
@@ -947,10 +885,7 @@ next
     thus "t_v_evaluation M F = Ttrue" using assms by(unfold model_def, auto)
   qed
 qed
-(*>*)
-text\<open>
-\<close>
-(*<*)
+
 lemma sets_have_distinct_representants:
   assumes
   hip1: "i\<in>I" and  hip2: "j\<in>I" and  hip3: "i\<noteq>j" and  hip4: "M model (\<T> S I)"
@@ -982,13 +917,10 @@ proof-
     by auto
   thus ?thesis using x2 y2 by auto
 qed  
-(*>*)
-text\<open>
-\<close>
+
 lemma satisfiable_representant:
   assumes "satisfiable (\<T> S I)" and "\<forall>i\<in>I. finite (S i)"
   shows "\<exists>R. system_representatives S I R"
-(*<*)
 proof-
   from assms have "\<exists>M. M model (\<T> S I)"  by(unfold satisfiable_def)
   then obtain M where M: "M model (\<T> S I)" by auto 
@@ -1033,10 +965,7 @@ proof-
   qed
   thus  "\<exists>R. system_representatives S I R" by auto
 qed
-(*>*)
-text\<open>
-Por último tenemos la formalización del teorema de Hall.
-\<close>
+
 theorem Hall:
   fixes S :: "'a \<Rightarrow> 'b set" and I :: "'a set"
   assumes "\<exists>g. enumeration (g:: nat \<Rightarrow>'a)" and "\<exists>h. enumeration (h:: nat \<Rightarrow>'b)" 
@@ -1047,7 +976,5 @@ proof-
   have "satisfiable (\<T> S I)" using assms all_formulas_satisfiable[of I] by auto
   thus ?thesis using Finite Marriage satisfiable_representant[of S I] by auto
 qed
-
-(*<*)
 end
-(*>*)
+
