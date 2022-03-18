@@ -712,6 +712,11 @@ qed
     by auto
 qed
 
+
+fun SDR ::  "(('a \<times> 'b) \<Rightarrow> v_truth) \<Rightarrow> ('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow> ('a \<Rightarrow>'b )"
+  where
+"SDR M S I = (\<lambda>i. (THE x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and> x\<in>(S i)))"
+
 lemma existence_representants:
  assumes "i \<in> I" and "M model (\<F> S I)" and "finite(S i)"  
   shows "\<exists>x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and>  x \<in> (S i)" 
@@ -814,7 +819,7 @@ shows  "(THE a. (t_v_evaluation M (atom (i,a)) = Ttrue) \<and> a\<in>(S i)) = x"
 
 lemma function_SDR:
   assumes "i \<in> I" and "M model (\<F> S I)" and "M model (\<G> S I)" and "finite(S i)"
-shows "\<exists>!x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and>  x \<in> (S i) \<and> SDR M S I i = x" 
+shows "\<exists>!x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and>  x \<in> (S i) \<and> (SDR  M S I i) = x" 
 proof- 
   have  "\<exists>x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and>  x \<in> (S i)" 
     using assms(1-2,4) existence_representants by auto 
@@ -827,7 +832,7 @@ proof-
   hence "(THE a. (t_v_evaluation M (atom (i,a)) = Ttrue) \<and> a\<in>(S i)) = x"
    using x  `i \<in> I`  uniqueness_aux[of M i x] by auto 
   hence "SDR M S I i = x"  by auto
-  hence "(t_v_evaluation M (atom (i,x)) = Ttrue \<and> x \<in> (S i)) \<and> SDR M S I i = x"
+  hence "(t_v_evaluation M (atom (i,x)) = Ttrue \<and> x \<in> (S i)) \<and>  SDR M S I i = x"
     using x by auto
   thus ?thesis  by auto
 qed
@@ -886,11 +891,11 @@ lemma sets_have_distinct_representants:
   assumes
   hip1: "i\<in>I" and  hip2: "j\<in>I" and  hip3: "i\<noteq>j" and  hip4: "M model (\<T> S I)"
   and hip5: "finite(S i)" and  hip6: "finite(S j)"
-shows "SDR M S I i  \<noteq>  SDR M S I j" 
+shows " SDR M S I i  \<noteq>  SDR M S I j" 
 proof-
   have 1: "M model \<F> S I" and 2:  "M model \<G> S I"
     using hip4 model_of_all by auto
-  hence "\<exists>!x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and> x \<in> (S i) \<and> SDR M S I i = x"
+  hence "\<exists>!x. (t_v_evaluation M (atom (i,x)) = Ttrue) \<and> x \<in> (S i) \<and>  SDR M S I i = x"
     using  hip1  hip4  hip5 function_SDR[of i I M S] by auto  
   then obtain x where
   x1: "(t_v_evaluation M (atom (i,x)) = Ttrue) \<and> x \<in> (S i)" and x2: "SDR M S I i = x"
@@ -973,4 +978,5 @@ proof-
   thus ?thesis using Finite Marriage satisfiable_representant[of S I] by auto
 qed
 end
+
 
