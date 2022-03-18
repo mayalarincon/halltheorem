@@ -571,8 +571,7 @@ corollary TeoremaCompacidad2:
   assumes "\<forall>A. (A \<subseteq> (S:: nat formula set) \<and> finite A) \<longrightarrow> satisfiable A" 
   shows "satisfiable S"
 using assms and EnumeracionFormulasNat and Compacteness_Theorem 
-by auto    
+by auto  
 
-(*<*)
 end
-(*>*)
+
