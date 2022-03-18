@@ -1,129 +1,12 @@
 
 theory TeoriaCompacidadIngles
-(*<*)
+
   imports Main 
 "ExistenciaModelosIngles/ExistenciaModeloIngles"
 
 begin
-(*>*)
-section \<open> Teorema de compacidad \<close>
 
 
-text\<open>
-%
-\begin{isabellebody}%
-\isamarkuptrue%
-\isacommand{theorem}\isamarkupfalse%
-\ TeoremaExistenciaModelos{\isacharcolon}\isanewline
-\ \ \isakeyword{assumes}\ h{\isadigit{1}}{\isacharcolon}\ {\isachardoublequoteopen}{\isasymexists}g{\isachardot}\ enumeration\ {\isacharparenleft}g{\isacharcolon}{\isacharcolon}\ nat\ {\isasymRightarrow}\ {\isacharprime}b\ formula{\isacharparenright}{\isachardoublequoteclose}\ \ \isanewline
-\ \ \isakeyword{and}\ h{\isadigit{2}}{\isacharcolon}\ {\isachardoublequoteopen}consistenciaP\ {\isasymC}{\isachardoublequoteclose}\ \isanewline
-\ \ \isakeyword{and}\ h{\isadigit{3}}{\isacharcolon}\ {\isachardoublequoteopen}{\isacharparenleft}S{\isacharcolon}{\isacharcolon}\ {\isacharprime}b\ formula\ set{\isacharparenright}\ {\isasymin}\ {\isasymC}{\isachardoublequoteclose}\isanewline
-\ \ \isakeyword{shows}\ {\isachardoublequoteopen}satisfiable\ S{\isachardoublequoteclose}\isanewline
-%
-\isadelimproof
-%
-\endisadelimproof
-%
-\end{isabellebody}
-
-%
-
-Para  aplicar el teorema anterior  en la formalización  del Teorema de Compacidad utilizamos
-el siguiente lema.
-
-  \begin{lema}\label{lemaComp} 
-  La colección de conjuntos de fórmulas proposicionales,
-  $$\mathcal{C} = 
-   \{W|\forall A\, (A\subseteq W \wedge A\mbox{ es finito } \rightarrow 
-                   A\mbox{ es satisfiable})\}$$
-  es una propiedad de consistencia.
-  \end{lema}
-
-\<close>
-
-text\<open>
-  \begin{demostracion}
-  Sea $W\in \mathcal{C}$. A continuación demostramos que $W$ verifica
-  las condiciones que definen una propiedad de consistencia
-  proposicional.
- 
-  (1). Sea $P$ un símbolo proposicional. Puesto que el conjunto $\{P,
-  \neg P\}$ es finito y no satisfiable entonces, $\{P, \neg
-  P\}\nsubseteq W$. Así $P\notin W$ o $\neg P \notin W$.
-
-  (2) y (3). Puesto que los conjuntos $\{\bot \}$ y $\{\neg \top\}$ son
-  finitos y no satisfiables entonces, $\{\bot\}\nsubseteq W$ y $\{\neg
-  \top\}\nsubseteq W$. Así $\bot, \neg \top \notin W$.
-
-  (4). Sea $\neg \neg F \in W$. Hay que demostrar que $W\cup \{F\}\in
-  \mathcal{C}$; es decir, hay que demostrar que todo subconjunto finito
-  de $W\cup \{F\}$ es satisfiable.  Supongamos que $A$ es un
-  subconjunto finito de $W \cup \{F\}$.  Entonces $A-\{F\}$ es un
-  subconjunto finito de $W$ y por tanto $(A-\{F\}) \cup \{\neg \neg F\}$
-  tambi\'en lo es.  Por consiguiente, $(A-\{F\}) \cup \{\neg \neg F\}$ es
-  satisfiable.  Luego existe una interpretación $I$, tal que para toda
-  fórmula $G$ de $(A-\{F\}) \cup \{\neg \neg F\}$, $I'(G) = \V$. Además,
-  puesto que $F$ y $\neg \neg F$ son equivalentes, se tiene que $I'(F) =
-  I'(\neg \neg F) =\V$. Así, $I'(G) = \V$ para toda fórmula $G$ de
-  $(A-\{F\}) \cup \{F\}$.  Luego $(A-\{F\}) \cup \{F\}$ es satisfiable
-  y como $A\subseteq (A-\{F\}) \cup \{F\}$, se tiene que $A$ es
-  satisfiable.
-
-  (5). Supongamos que $\alpha\in W$. Hay que demostrar que
-  $W\cup\{\alpha_1, \alpha_2\}\in \mathcal{C}$; es decir, hay que
-  demostrar que todo subconjunto finito de $W\cup\{\alpha_1, \alpha_2\}$
-  es satisfiable.  Suponga\-mos que $A$ es un subconjunto finito de $W
-  \cup \{\alpha_1, \alpha_2\}$.  Entonces, $A-\{\alpha_1, \alpha_2\}$ es
-  un subconjunto finito de $W$ y por tanto $(A-\{\alpha_1, \alpha_2\})
-  \cup \{\alpha\}$ también lo es.  finito de $W$.  Luego $(A-\{\alpha_1,
-  \alpha_2\}) \cup \{\alpha\}$ es satisfiable. Por consiguiente, existe
-  una interpretación $I$ tal que para toda fórmula $F$ de
-  $(A-\{\alpha_1, \alpha_2\}) \cup \{\alpha\}$, $I'(F) = \V$. Además,
-  puesto que $\alpha$ y $\alpha_1\wedge \alpha_2$ son equivalentes, se
-  tiene que $I'(\alpha_1) = I'(\alpha_2) = I'(\alpha) = \V$.  Así,
-  $I'(F) = \V$ para toda fórmula $F$ de $(A-\{\alpha_1, \alpha_2\}) \cup
-  \{\alpha_1, \alpha_2\}$.  Luego $(A-\{\alpha_1, \alpha_2\}) \cup
-  \{\alpha_1, \alpha_2\}$ es satisfiable y por tanto, $A$ es
-  satisfiable.
-
-  (6). Supongamos que $\beta \in W$. Hay que demostrar que
-  $W\cup\{\beta_1\}\in \mathcal{C}$ o 
-  \linebreak
-  $W\cup\{\beta_2\}\in \mathcal{C}$; es decir, hay que demostrar que
-  todo subconjunto finito de $W\cup\{\beta_1\}$ es satisfiable o que
-  todo subconjunto finito de $W\cup\{\beta_2\}$ es satisfiable. La
-  demostración es por contradicción.  Supongamos que, existe un
-  subconjunto finito $A$ de $W\cup\{\beta1\}$ no satisfiable y un
-  subconjunto finito $B$ de $W\cup\{\beta_2\}$ no satisfiable.
-  Entonces $A - \{\beta_1\}$ y $B - \{\beta_2\}$ son subconjuntos
-  finitos de $W$ y por tanto $(A - \{\beta_1\})\cup (B -
-  \{\beta_2\})\cup\{\beta\}$ es un subconjunto finito de $W$. Luego, $(A
-  - \{\beta_1\})\cup (B - \{\beta_2\})\cup\{\beta\}$ es satisfiable.
-  Por consiguiente, existe una interpretación $I$ tal que para toda
-  fórmula $F$ de $(A - \{\beta_1\})\cup (B - \{\beta_2\})\cup\{\beta\}$,
-  $I(F) = \V$.  En particular, $I(\beta) = \V$. Luego, puesto que
-  $\beta$ y $\beta_1\vee \beta_2$ son equivalentes, se tiene que
-  $I(\beta_1) = \V$ o $I(\beta_2) = \V$.
-
-  Así, para toda fórmula $F$ de $(A - \{\beta_1\})\cup (B -
-  \{\beta_2\})\cup\{\beta_1\}$, $I'(F)= \V$ o para toda fórmula $F$ de
-  $(A - \{\beta_1\})\cup (B - \{\beta_2\})\cup\{\beta_2\}$, $I'(F) =
-  \V$.
-
-  Luego, $(A - \{\beta_1\})\cup (B - \{\beta_2\})\cup\{\beta_1\}$ o $(A
-  - \{\beta_1\})\cup (B - \{\beta_2\})\cup\{\beta_2\}$ es
-  sa\-tisfacible.  De esta forma, puesto que $A\subseteq (A -
-  \{\beta_1\})\cup (B - \{\beta_2\})\cup\{\beta_1\}$ y \linebreak
-  $B\subseteq (A - \{\beta_1\})\cup (B - \{\beta_2\})\cup\{\beta_2\}$,
-  se tiene que $A$ es satisfiable o $B$ es satisfiable.  Esto último
-  contradice la hipótesis de que $A$ y $B$ no son satifacibles.
-  \end{demostracion}
-
-  Los siguientes lemas permiten formalizar la prueba del lema anterior.
-
-  En la demostración de (1) se utilizó la propiedad ``$\{F, \neg F\}$ es
-  insatisfiable para cualquier fórmula $F$". En Isabelle, 
-\<close>
 
 lemma NosatisfiableAtom:
   shows "\<not>(satisfiable {F, \<not>.F})"
@@ -138,10 +21,7 @@ proof (rule notI)
     thus "False" by(auto simp add: v_negation_def)
   qed
 qed
-
-text \<open>
-  La formalización de la prueba de la propiedad (1) es la siguiente:
-\<close> 
+ 
 
 lemma comp1:
   assumes "\<forall> (A::'b formula set). (A\<subseteq> W \<and> finite A) \<longrightarrow> satisfiable A"
@@ -166,11 +46,6 @@ proof (rule allI notI)+
   qed
 qed
 
-text \<open>
-  En la demostración de (2) se utilizó la propiedad, ``$\{\bot\}$ es
-  insatisfiable". En Isabelle, 
-\<close>
-
 lemma NosatisfiableFF:
   shows "\<not> (satisfiable {FF})"
 proof -
@@ -178,10 +53,6 @@ proof -
   hence "\<forall> I. \<not> (I model {FF})"  by(unfold model_def, auto) 
   thus ?thesis by(unfold satisfiable_def, auto)
 qed
-
-text \<open>
-  La formalización de la prueba de la propiedad (2) es la siguiente:
-\<close>
 
 lemma comp2:
   assumes "\<forall> (A::'b formula set). (A\<subseteq> W \<and> finite A) \<longrightarrow> satisfiable A"
@@ -205,11 +76,6 @@ proof (rule notI)
   qed
 qed
 
-text \<open>
-  En la demostración de (3) se utilizó la propiedad, ``$\{\neg \top \}$
-  es insatisfiable". Su for\-malización en Isabelle es, 
-\<close> 
-
 lemma NosatisfiableFFa:
   shows "\<not> (satisfiable {\<not>.TT})"
 proof -
@@ -219,9 +85,6 @@ proof -
   thus ?thesis by(unfold satisfiable_def, auto)
 qed
 
-text \<open>
-  La formalización de la prueba de la propiedad (3) es la siguiente:
-\<close>
 
 lemma comp3:
   assumes "\<forall> (A::'b formula set). (A\<subseteq> W \<and> finite A) \<longrightarrow> satisfiable A"
@@ -245,12 +108,6 @@ proof (rule notI)
   qed
 qed
 
-text \<open>
-  En la prueba de (4) se utilizaron la siguientes propiedades: ``los
-  subconjuntos de un conjunto satisfiable son satisfiables" y ``si $S
-  \cup \{\neg \neg F \}$ es satisfiable, entonces $S \cup \{F\}$ es
-  satisfiable".  En Isabelle se expresan como sigue:
-\<close>
 
 lemma SubSatis:
   assumes hip1: "satisfiable S" and hip2: "S'\<subseteq> S"
@@ -281,9 +138,6 @@ proof -
     by(unfold satisfiable_def, unfold model_def, auto)
 qed
 
-text \<open>
-  La formalización de la prueba de la propiedad (4) es la siguiente:
-\<close>
 
 lemma comp4:
   assumes hip1: "\<forall> (A::'b formula set). (A\<subseteq> W \<and> finite A) \<longrightarrow> satisfiable A" 
@@ -306,11 +160,6 @@ proof (rule allI, rule impI)+
   qed
 qed
 
-text \<open>
-  En la prueba de (5) se utilizó la propiedad ``si $A \cup \{\alpha \}$
-  es satisfiable entonces \linebreak 
-  $A \cup \{\alpha_1, \alpha_2\}$ también lo es". En Isabelle,
-\<close>
 
 lemma satisfiableUnion2:
   assumes hip1: "FormulaAlfa F" and hip2: "satisfiable (A \<union> {F})" 
@@ -332,9 +181,6 @@ proof -
     by (unfold satisfiable_def, unfold model_def, auto)
 qed
 
-text \<open>
-  La formalización de la prueba de la propiedad (5) es la siguiente:
-\<close>
 
 lemma comp5:
   assumes hip0: "FormulaAlfa F" 
@@ -363,11 +209,6 @@ proof (rule allI, rule impI)+
   qed
 qed
 
-text \<open>
-  En la prueba de (6) se utilizó la propiedad ``si $A \cup \{\beta \}$
-  es satisfiable entonces\linebreak $A \cup \{\beta_1\}$ o $A \cup
-  \{\beta_2\}$ es satisfiable". En Isabelle,
-\<close>
 
 lemma satisfiableUnion3:
   assumes hip1: "FormulaBeta F" and hip2: "satisfiable (A \<union> {F})" 
@@ -405,9 +246,6 @@ proof -
   by (unfold satisfiable_def, unfold model_def, auto)
 qed
 
-text \<open>
-  La formalización de la prueba de la propiedad (6) es la siguiente:
-\<close>
 
 lemma comp6:
   assumes hip0: "FormulaBeta F" 
@@ -458,10 +296,6 @@ proof -
     qed } 
   thus ?thesis by auto
 qed
-
-text \<open>
-La formalización del lema \ref{lemaComp} es la siguiente. 
-\<close>
 
 lemma ConsistenciaCompacidad:   
   shows "consistenceP{W::'b formula set. \<forall>A. (A\<subseteq> W \<and> finite A) \<longrightarrow> 
@@ -515,23 +349,6 @@ proof (unfold consistenceP_def, rule allI, rule impI)
   qed
 qed
 
-text \<open>
-  \begin{teorema}[Teorema de Compacidad (3.6.3 en \cite{Fitting})]\label{compacidad}
-  Sean $L$ un lenguaje proposicional enumerable y $S$ un
-  conjunto de fórmulas proposicionales. Si todo subconjunto finito de
-  $S$ es satisfiable, entonces $S$ es satisfiable.
-\end{teorema}
-
-  \begin{demostracion} 
-  Sea $\mathcal{C}=\{W|\forall A\, (A\subseteq W \wedge A\mbox{ es
-  finito } \rightarrow A\mbox{ es satisfiable})\}.$ Entonces por
-  hipótesis $S\in \mathcal{C}$. Luego, por el lemma \ref{lemaComp} y el
-  teorema \ref{ConjuntosatisfiableP} se concluye que $S$ es
-  satisfiable.
-  \end{demostracion} 
-
-  La formalización del Teorema de Compacidad es la siguiente:
-\<close>
 
 theorem Compacteness_Theorem:
   assumes hip1: "\<exists>g. enumeration (g:: nat \<Rightarrow> 'b formula)"  
@@ -547,31 +364,11 @@ proof -
   show "satisfiable S" using  hip1 and TeoremaExistenciaModelos[of ?C S] by auto
 qed
 
-text \<open>
-  En el caso del lenguaje proposicional en el que identificamos los
-  símbolos proposicionales con los números naturales, tenemos el
-  siguiente corolario.
-
-  \begin{corolario}
-  Sean $L$ el lenguaje proposicional en el que los símbolos
-  proposicionales son los números natu\-rales y $S$ un conjunto de
-  fórmulas proposicionales. Si todo subconjunto finito de $S$ es
-  satisfiable, entonces $S$ es satisfiable.
-\end{corolario}
-\<close>
-
-text\<open>
- \begin{demostracion} 
-  Puesto que existe una enumeración del lenguaje con símbolos proposicionales los números naturales,
-  entonces por el teorema anterior se tiene el resultado.
-  \end{demostracion} 
-\<close>
-
 corollary TeoremaCompacidad2:
   assumes "\<forall>A. (A \<subseteq> (S:: nat formula set) \<and> finite A) \<longrightarrow> satisfiable A" 
   shows "satisfiable S"
 using assms and EnumeracionFormulasNat and Compacteness_Theorem 
-by auto  
+by auto    
 
 end
 
