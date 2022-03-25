@@ -706,7 +706,7 @@ proof-
  qed
 qed
   thus "satisfiable (\<T> S I)" using 
-  Compacteness_Theorem[OF  EnumFormulasHall[OF
+  Compactness_Theorem[OF  EnumFormulasHall[OF
   `\<exists>g. enumeration (g:: nat \<Rightarrow>'a)`  `\<exists>h. enumeration (h:: nat \<Rightarrow>'b)` ],
        of "(\<T> S I)"]
     by auto
