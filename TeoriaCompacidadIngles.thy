@@ -297,7 +297,7 @@ proof -
   thus ?thesis by auto
 qed
 
-lemma ConsistenciaCompacidad:   
+lemma ConsistenceCompactness:   
   shows "consistenceP{W::'b formula set. \<forall>A. (A\<subseteq> W \<and> finite A) \<longrightarrow> 
   satisfiable A}"
 proof (unfold consistenceP_def, rule allI, rule impI)  
@@ -350,24 +350,24 @@ proof (unfold consistenceP_def, rule allI, rule impI)
 qed
 
 
-theorem Compacteness_Theorem:
+theorem Compactness_Theorem:
   assumes hip1: "\<exists>g. enumeration (g:: nat \<Rightarrow> 'b formula)"  
   and hip2: "\<forall>A. (A \<subseteq> (S:: 'b formula set) \<and> finite A) \<longrightarrow> satisfiable A" 
   shows "satisfiable S"
 proof -   
   let ?C = "{W:: 'b formula set.  \<forall>A. (A \<subseteq> W \<and> finite A) \<longrightarrow> satisfiable A}"
   have "consistenceP ?C"
-    using ConsistenciaCompacidad by simp 
+    using ConsistenceCompactness by simp 
   moreover
   have "S \<in> ?C" using hip2 by simp
   ultimately 
   show "satisfiable S" using  hip1 and TeoremaExistenciaModelos[of ?C S] by auto
 qed
 
-corollary TeoremaCompacidad2:
+corollary TeoremaCompactness:
   assumes "\<forall>A. (A \<subseteq> (S:: nat formula set) \<and> finite A) \<longrightarrow> satisfiable A" 
   shows "satisfiable S"
-using assms and EnumeracionFormulasNat and Compacteness_Theorem 
+using assms and EnumeracionFormulasNat and Compactness_Theorem 
 by auto    
 
 end
