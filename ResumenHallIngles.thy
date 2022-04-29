@@ -1,8 +1,9 @@
 theory ResumenHallIngles
-  imports
+imports
   Main
-  Marriage
-"TeoriaCompacidadIngles"
+ "Marriage.Marriage"
+ "TeoriaCompacidadIngles"
+
 begin
 
 definition system_representatives :: "('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> bool" where
@@ -33,7 +34,7 @@ proof-
     by auto
   hence "t_v_evaluation I ((atom (i ,a)) \<or>. (disjunction_atomic l i)) = Ttrue" 
     using assms by auto
-  thus ?thesis using ValoresDisyuncion by blast
+  thus ?thesis using DisjunctionValues by blast
 qed
 
 lemma t_v_evaluation_atom:
@@ -452,12 +453,12 @@ proof(rule ccontr)
     by auto     
   hence  "t_v_evaluation (Hall_interpretation S I R) ((atom (i,x) \<and>. atom (i, y))) = Ttrue" 
     using
-  ValoresNegacion1[of "Hall_interpretation S I R" "(atom (i,x) \<and>. atom (i, y))"]
+  NegationValues1[of "Hall_interpretation S I R" "(atom (i,x) \<and>. atom (i, y))"]
     by auto
   hence "t_v_evaluation (Hall_interpretation S I R) (atom (i,x)) = Ttrue" and
   "t_v_evaluation (Hall_interpretation S I R) (atom (i, y)) = Ttrue"
     using
- ValoresConjuncion[of "Hall_interpretation S I R" "atom (i,x)" "atom (i, y)"]
+ ConjunctionValues[of "Hall_interpretation S I R" "atom (i,x)" "atom (i, y)"]
     by auto
   hence "(R i)= x" and "(R i)= y" using t_v_evaluation_index by auto
   hence "x=y" by auto
@@ -478,11 +479,11 @@ proof(rule ccontr)
     by auto
   hence  "t_v_evaluation (Hall_interpretation S I R) ((atom (i,x) \<and>. atom (j, x))) = Ttrue" 
     using 
- ValoresNegacion1[of "Hall_interpretation S I R" "(atom (i,x) \<and>. atom (j, x))"] 
+ NegationValues1[of "Hall_interpretation S I R" "(atom (i,x) \<and>. atom (j, x))"] 
     by auto
   hence "t_v_evaluation (Hall_interpretation S I R) (atom (i,x)) = Ttrue" and
   "t_v_evaluation (Hall_interpretation S I R) (atom (j, x)) = Ttrue"
-    using ValoresConjuncion[of "Hall_interpretation S I R" "atom (i,x)" "atom (j,x)"]
+    using ConjunctionValues[of "Hall_interpretation S I R" "atom (i,x)" "atom (j,x)"]
     by auto
   hence  "(R i)= x"  and  "(R j)= x" using t_v_evaluation_index by auto
   hence "(R i) = (R j)" by auto
@@ -665,7 +666,7 @@ proof-
     qed
   qed
   thus "\<exists>f. enumeration (f:: nat \<Rightarrow>('a \<times>'b )formula)" 
-    using EnumeracionFormulasP1 by auto 
+    using EnumerationFormulasP1 by auto 
 qed
 
 theorem all_formulas_satisfiable:
@@ -706,12 +707,11 @@ proof-
  qed
 qed
   thus "satisfiable (\<T> S I)" using 
-  Compactness_Theorem[OF  EnumFormulasHall[OF
+  Compacteness_Theorem[OF  EnumFormulasHall[OF
   `\<exists>g. enumeration (g:: nat \<Rightarrow>'a)`  `\<exists>h. enumeration (h:: nat \<Rightarrow>'b)` ],
        of "(\<T> S I)"]
     by auto
 qed
-
 
 fun SDR ::  "(('a \<times> 'b) \<Rightarrow> v_truth) \<Rightarrow> ('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow> ('a \<Rightarrow>'b )"
   where
@@ -794,7 +794,7 @@ proof(rule allI, rule impI)
     have "t_v_evaluation M (\<not>.(atom (i,x) \<and>. atom(i,y))) = Ttrue"
       using hip assms(2) by auto
     hence "t_v_evaluation M (atom (i,x) \<and>. atom(i,y)) = Ffalse" 
-      using ValoresNegacion2  by blast
+      using NegationValues2  by blast
     thus False using 1  by auto
   qed      
 qed

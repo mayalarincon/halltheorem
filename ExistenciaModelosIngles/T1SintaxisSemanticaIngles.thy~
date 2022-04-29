@@ -186,7 +186,7 @@ text \<open>
   \noindent Su formalización es: 
 \<close>
 
-lemma NegationValues1:
+lemma ValoresNegacion1:
 assumes "t_v_evaluation I (\<not>.F) = Ffalse"
 shows "t_v_evaluation I F = Ttrue"
 (*<*)
@@ -208,7 +208,7 @@ text \<open>
   \noindent Su formalización es: 
 \<close>
 
-lemma NegationValues2:
+lemma ValoresNegacion2:
 assumes "t_v_evaluation I (\<not>.F) = Ttrue"
 shows "t_v_evaluation I F = Ffalse"
 (*<*)
@@ -238,7 +238,7 @@ text \<open>
   \noindent Su formalización es: 
 \<close>
 
-lemma ConjunctionValues: 
+lemma ValoresConjuncion: 
   assumes "t_v_evaluation I (F \<and>. G) = Ttrue" 
   shows "t_v_evaluation I F = Ttrue \<and> t_v_evaluation I G = Ttrue"
 (*<*)
@@ -260,7 +260,7 @@ text \<open>
   \noindent Su formalización es: 
 \<close>
 
-lemma DisjunctionValues:
+lemma ValoresDisyuncion:
   assumes "t_v_evaluation I (F \<or>. G ) = Ttrue"
   shows "t_v_evaluation I  F = Ttrue \<or> t_v_evaluation I G = Ttrue" 
 (*<*)
@@ -282,7 +282,7 @@ text \<open>
   \noindent Su formalización es:
  \<close>
 
-lemma ImplicationValues:
+lemma ValoresImplicacion:
   assumes "t_v_evaluation I (F \<rightarrow>. G) = Ttrue"
   shows "t_v_evaluation I F = Ttrue \<longrightarrow> t_v_evaluation I G = Ttrue"
 (*<*) 
@@ -601,7 +601,7 @@ moreover
       by(simp add: model_def)
     then obtain I where I1: "t_v_evaluation I F = Ttrue" and I2: "t_v_evaluation I (\<not>.G) = Ttrue"
       by auto
-    have "t_v_evaluation I G = Ffalse" using I2 NegationValues2 by auto   
+    have "t_v_evaluation I G = Ffalse" using I2 ValoresNegacion2 by auto   
     hence "t_v_evaluation I (F \<rightarrow>. G) = Ffalse" using I1 
       by (simp add: v_implication_def)
     thus "\<not> tautologia (F \<rightarrow>. G)" by (auto, unfold tautologia_def, auto)
@@ -637,7 +637,7 @@ proof-
     by auto
   hence "t_v_evaluation I ((atom (i ,a)) \<or>. (disjunction_atomic l i)) = Ttrue" 
     using assms by auto
-  thus ?thesis using DisjunctionValues by blast
+  thus ?thesis using ValoresDisyuncion by blast
 qed
 
 lemma t_v_evaluation_atom:

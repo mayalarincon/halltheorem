@@ -340,7 +340,7 @@ corollary ConjuntosatisfiableP1:
 proof -
   obtain g where g: "enumeration (g:: nat \<Rightarrow> 'b )" 
     using h0 by auto
-  have "enumeration ((\<Delta>P g):: nat \<Rightarrow> 'b formula)" using g  EnumerationFormulasP1 by auto
+  have "enumeration ((\<Delta>P g):: nat \<Rightarrow> 'b formula)" using g  EnumeracionFormulasP1 by auto
   hence  h'0: "\<exists>g. enumeration (g:: nat \<Rightarrow> 'b formula)" by auto
   show ?thesis using TeoremaExistenciaModelos[OF h'0 h1 h2] by auto
 qed

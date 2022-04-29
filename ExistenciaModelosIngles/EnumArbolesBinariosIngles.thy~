@@ -9,7 +9,7 @@ section \<open> Enumeración de fórmulas proposicionales \<close>
 text \<open>
   \label{enumeration} 
   En esta sección presentamos en un estilo declarativo en Isabelle/Isar una forma de enumerar las fórmulas de
-  cualquier lenguaje de la lógica proposicional, de acuerdo a la sección 6.4 de la teoría FOL_Fitting, v 1.2-
+  cualquier lenguaje de la lógica proposicional, de acuerdo a la sección 6.4 de la teoría FOL_Fitting, v 1.2
   2007 (Stefan Berghofer, First-Order Logic According to Fitting).
   La manera de enumerar las fórmulas está  basada en representarlas 
   por medio de árboles binarios de números naturales.  De esta forma, si

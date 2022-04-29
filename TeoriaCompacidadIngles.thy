@@ -175,7 +175,7 @@ proof -
   hence  "t_v_evaluation I (Comp1 F \<and>. Comp2 F) = Ttrue" 
     using 2 by( unfold equivalentes_def, auto) 
   hence "t_v_evaluation I (Comp1 F) = Ttrue \<and> t_v_evaluation I (Comp2 F) = Ttrue"  
-    using ValoresConjuncion by auto 
+    using ConjunctionValues by auto 
   hence "\<forall> G \<in> A \<union> {Comp1 F, Comp2 F} . t_v_evaluation I G = Ttrue" using 1 by auto
   thus "satisfiable (A \<union> {Comp1 F,Comp2 F})" 
     by (unfold satisfiable_def, unfold model_def, auto)
@@ -220,7 +220,7 @@ proof -
     and S2: " t_v_evaluation I F = Ttrue" 
     by auto
   have V: "t_v_evaluation I (Comp1 F) = Ttrue \<or> t_v_evaluation I (Comp2 F) = Ttrue" 
-    using hip1 S2 EquivBetaComp[of F] ValoresDisyuncion 
+    using hip1 S2 EquivBetaComp[of F] DisjunctionValues
     by (unfold equivalentes_def, auto)       
   have "((\<forall>G \<in> A. t_v_evaluation I G = Ttrue) \<and> t_v_evaluation I (Comp1 F) = Ttrue) \<or>
         ((\<forall>G \<in> A. t_v_evaluation I G = Ttrue) \<and> t_v_evaluation I (Comp2 F) = Ttrue)" 
@@ -297,7 +297,7 @@ proof -
   thus ?thesis by auto
 qed
 
-lemma ConsistenceCompactness:   
+lemma ConsistenciaCompacidad:   
   shows "consistenceP{W::'b formula set. \<forall>A. (A\<subseteq> W \<and> finite A) \<longrightarrow> 
   satisfiable A}"
 proof (unfold consistenceP_def, rule allI, rule impI)  
@@ -350,24 +350,24 @@ proof (unfold consistenceP_def, rule allI, rule impI)
 qed
 
 
-theorem Compactness_Theorem:
+theorem Compacteness_Theorem:
   assumes hip1: "\<exists>g. enumeration (g:: nat \<Rightarrow> 'b formula)"  
   and hip2: "\<forall>A. (A \<subseteq> (S:: 'b formula set) \<and> finite A) \<longrightarrow> satisfiable A" 
   shows "satisfiable S"
 proof -   
   let ?C = "{W:: 'b formula set.  \<forall>A. (A \<subseteq> W \<and> finite A) \<longrightarrow> satisfiable A}"
   have "consistenceP ?C"
-    using ConsistenceCompactness by simp 
+    using ConsistenciaCompacidad by simp 
   moreover
   have "S \<in> ?C" using hip2 by simp
   ultimately 
   show "satisfiable S" using  hip1 and TeoremaExistenciaModelos[of ?C S] by auto
 qed
 
-corollary TeoremaCompactness:
+corollary TeoremaCompacidad2:
   assumes "\<forall>A. (A \<subseteq> (S:: nat formula set) \<and> finite A) \<longrightarrow> satisfiable A" 
   shows "satisfiable S"
-using assms and EnumeracionFormulasNat and Compactness_Theorem 
+using assms and EnumeracionFormulasNat and Compacteness_Theorem 
 by auto    
 
 end

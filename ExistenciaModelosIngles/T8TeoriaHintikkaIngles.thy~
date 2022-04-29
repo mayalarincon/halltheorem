@@ -450,7 +450,7 @@ proof(rule conjI)
         using hip2 by simp    
         ultimately 
         have 1: "t_v_evaluation (IH H) (\<not>.F1) = Ttrue" by simp       
-        hence "t_v_evaluation (IH H) F1 = Ffalse" using NegationValues2 by auto                  
+        hence "t_v_evaluation (IH H) F1 = Ffalse" using ValoresNegacion2 by auto                  
         thus "t_v_evaluation (IH H) (\<not>.(F1 \<and>. F2)) = Ttrue" 
         by (simp add: v_negation_def, simp add: v_conjunction_def)          next  
         assume "(\<not>.F2) \<in> H"
@@ -460,7 +460,7 @@ proof(rule conjI)
         using hip2 by simp    
         ultimately 
         have 1: "t_v_evaluation (IH H) (\<not>.F2) = Ttrue" by simp
-        hence "t_v_evaluation (IH H) F2 = Ffalse" using NegationValues2 by auto          
+        hence "t_v_evaluation (IH H) F2 = Ffalse" using ValoresNegacion2 by auto          
         thus "t_v_evaluation (IH H) (\<not>.(F1 \<and>. F2)) = Ttrue"
         by (simp add: v_negation_def, simp add: v_conjunction_def)                
       qed 
@@ -530,9 +530,9 @@ proof(rule conjI)
       ultimately
       have 1: "t_v_evaluation (IH H) (\<not>.F1) = Ttrue" and
            2: "t_v_evaluation (IH H) (\<not>.F2) = Ttrue" by auto
-      have "t_v_evaluation (IH H) F1 = Ffalse" using 1 NegationValues2 by auto              
+      have "t_v_evaluation (IH H) F1 = Ffalse" using 1 ValoresNegacion2 by auto              
       moreover
-      have "t_v_evaluation (IH H) F2 = Ffalse" using 2 NegationValues2 by auto      
+      have "t_v_evaluation (IH H) F2 = Ffalse" using 2 ValoresNegacion2 by auto      
       ultimately   
       show  "t_v_evaluation (IH H) (\<not>.(F1 \<or>. F2)) = Ttrue"
       by (simp add: v_disjunction_def, simp add: v_negation_def)      
@@ -565,7 +565,7 @@ proof(rule conjI impI)+
       using hip2 by simp
       ultimately
       have 1: "t_v_evaluation (IH H) (\<not>.F1) = Ttrue" by simp
-      hence "t_v_evaluation (IH H) F1 = Ffalse" using NegationValues2 by auto       
+      hence "t_v_evaluation (IH H) F1 = Ffalse" using ValoresNegacion2 by auto       
       thus "t_v_evaluation (IH H) (F1 \<rightarrow>. F2) = Ttrue"  by(simp add: v_implication_def)
       next
       assume "F2 \<in> H"
