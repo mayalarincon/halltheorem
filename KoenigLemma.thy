@@ -4,7 +4,7 @@ theory KoenigLemma
 "TeoriaCompacidadIngles"  
 begin
 (*>*)
-section \<open> König's Lemma Theory  \cite{Fitting} \<close>
+section \<open> König's Lemma Theory \<close>
 
 text\<open>
 Using the Compactness Theorem for propositional logic, we formalise König's Lemma for enumerable trees:
