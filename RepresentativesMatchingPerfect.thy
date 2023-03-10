@@ -996,3 +996,5 @@ proof(unfold tails_set_def)
     qed
   qed
 qed
+
+end 

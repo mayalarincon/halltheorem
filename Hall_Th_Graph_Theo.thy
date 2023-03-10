@@ -15,115 +15,6 @@ definition dirBD_to_Hall::
    "dirBD_to_Hall G X Y I S ≡
    dir_bipartite_digraph G X Y ∧ I = X ∧ (∀v∈I. (S v) = (neighborhood G v))"  
 
-definition E_head :: "('a,'b) pre_digraph ⇒ 'b set  ⇒ ('a  ⇒ 'a)" 
-  where
-  "E_head G E = (λx. (THE y. ∃ e. e ∈ E ∧ tail G e = x ∧  head G e = y))"
-
-lemma unicity_E_head1:
-   assumes "dirBD_matching G X Y E ∧ e ∈ E ∧ tail G e = x ∧ head G e = y"
-   shows "(∀z.(∃ e. e ∈ E ∧ tail G e = x ∧ head G e = z)⟶ z = y)"
-proof(rule allI, rule impI)
-  fix z
-  assume "∃e. e ∈ E ∧ tail G e = x ∧ head G e = z"
-  then obtain e1 where e1: "e1 ∈ E ∧ tail G e1 = x ∧ head G e1 = z " by auto
-  hence "e1 = e" using assms by(unfold dirBD_matching_def, auto) 
-  thus "z = y" using e1 assms  by(unfold dirBD_matching_def, auto)
-qed
-
-lemma unicity_E_head2:
-   assumes "dirBD_matching G X Y E ∧ e ∈ E ∧ tail G e = x ∧ head G e = y" 
-   shows  "(THE a. ∃ e. e ∈ E ∧ tail G e = x ∧ head G e = a) = y" 
-proof-
-  have "e ∈ E ∧ tail G e = x ∧ head G e = y" using assms by auto
-  moreover
-  have  "(∀z.(∃ e. e ∈ E ∧ tail G e = x ∧ head G e = z)⟶ z = y)" 
-    using assms  unicity_E_head1[of G X Y E e x y] by auto
-  hence  "(⋀z.(∃ e. e ∈ E ∧ tail G e = x ∧  head G e = z) ⟹ z = y)" by auto
-  ultimately
-  show ?thesis using the_equality by auto
-qed
-
-lemma  unicity_E_head:
-  assumes "dirBD_matching G X Y E ∧ e ∈ E ∧ tail G e = x ∧ head G e = y" 
-  shows "(E_head G E) x = y"
-  using assms unicity_E_head2[of G X Y E e x y] by(unfold E_head_def, auto)
-
-lemma E_head_image : 
-  "dirBD_perfect_matching G X Y E ⟶  
-   (e ∈ E ∧ tail G e = x ⟶ (E_head G E) x = head G e)"
-proof
-  assume "dirBD_perfect_matching G X Y E" 
-  thus "e ∈ E ∧ tail G e = x ⟶ (E_head G E) x = head G e"
-    using dirBD_matching_tail_edge_unicity [of G X Y E] 
-    by (unfold E_head_def, unfold dirBD_perfect_matching_def, auto)
-qed
-
-lemma E_head_in_neighborhood:
-  "dirBD_matching G X Y E ⟶ e ∈ E ⟶ tail G e = x ⟶ 
-   (E_head G E) x ∈ neighborhood G x"
-proof (rule impI)+
-  assume 
-  dir_BDm: "dirBD_matching G X Y E" and ed: "e ∈ E" and hd: "tail G e = x"
-  show "E_head G E x ∈ neighborhood G x" 
-  proof- 
-    have  "(∃y. y = head G e)" using hd by auto
-    then obtain y where y: "y = head G e" by auto
-    hence "(E_head G E) x = y" 
-      using dir_BDm ed hd unicity_E_head[of G X Y E e x y] 
-      by auto
-    moreover
-    have "e ∈ (arcs G)" using dir_BDm ed by(unfold dirBD_matching_def, auto)
-    hence "neighbor G y x" using ed hd y by(unfold neighbor_def, auto)
-    ultimately
-    show ?thesis using  hd ed by(unfold neighborhood_def, auto)
-  qed
-qed
-
-lemma dirBD_matching_inj_on:
-   "dirBD_perfect_matching G X Y E ⟶ inj_on (E_head G E) X"
-proof(rule impI)
-  assume dirBD_pm : "dirBD_perfect_matching G X Y E"
-  show "inj_on (E_head G E) X" 
-  proof(unfold inj_on_def)
-    show "∀x∈X. ∀y∈X. E_head G E x = E_head G E y ⟶ x = y"
-    proof
-      fix x
-      assume 1: "x∈ X"
-      show "∀y∈X. E_head G E x = E_head G E y ⟶ x = y"
-      proof 
-        fix y
-        assume 2: "y∈ X" 
-        show "E_head G E x = E_head G E y ⟶ x = y"
-        proof(rule impI)
-          assume same_eheads: "E_head G E x = E_head G E y" 
-          show "x=y"
-          proof- 
-            have hex: " (∃!e ∈ E. tail G e = x)"
-              using dirBD_pm 1 Edge_unicity_in_dirBD_P_matching[of X G Y E] 
-              by auto
-            then obtain ex where hex1: "ex ∈ E ∧ tail G ex = x" by auto
-            have ey: " (∃!e ∈ E. tail G e = y)" 
-              using  dirBD_pm 2 Edge_unicity_in_dirBD_P_matching[of X G Y E] 
-              by auto
-            then obtain ey where hey1: "ey ∈ E ∧ tail G ey = y" by auto
-            have ettx: "E_head G E x = head G ex"
-              using  dirBD_pm hex1 E_head_image[of G X Y E ex x] by auto
-            have etty: "E_head G E y = head G ey"
-              using  dirBD_pm hey1 E_head_image[of G X Y E ey y] by auto
-            have same_heads: "head G ex = head G ey" 
-              using same_eheads ettx etty by auto
-            hence same_edges: "ex = ey" 
-              using dirBD_pm 1 2 hex1 hey1 
-                    dirBD_matching_head_edge_unicity[of G X Y E]
-            by(unfold dirBD_perfect_matching_def,unfold dirBD_matching_def, blast)
-            thus ?thesis using  same_edges hex1 hey1 by auto
-          qed
-        qed
-      qed
-    qed
-  qed
-qed
-
 theorem dir_BD_to_Hall: 
    "dirBD_perfect_matching G X Y E ⟶ 
     system_representatives (neighborhood G) X (E_head G E)"
@@ -180,7 +71,7 @@ proof(rule allI, rule impI)
       have  "∃R. (∀i∈X. R i ∈ neighborhood G i) ∧ inj_on R X"
         using assms  dir_BD_to_Hall[of G X Y E]
         by(unfold system_representatives_def, auto) 
-      thus ?thesis using assms(2)  marriage_necessary[of X "neighborhood G" ] hip1 hip2 by auto
+      thus ?thesis using assms(2)  marriage_necessity[of X "neighborhood G" ] hip1 hip2 by auto
     qed
   qed
 qed

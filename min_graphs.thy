@@ -137,4 +137,113 @@ proof
   qed
 qed
 
+definition E_head :: "('a,'b) pre_digraph \<Rightarrow> 'b set  \<Rightarrow> ('a  \<Rightarrow> 'a)" 
+  where
+  "E_head G E = (\<lambda>x. (THE y. \<exists> e. e \<in> E \<and> tail G e = x \<and>  head G e = y))"
+
+lemma unicity_E_head1:
+   assumes "dirBD_matching G X Y E \<and> e \<in> E \<and> tail G e = x \<and> head G e = y"
+   shows "(\<forall>z.(\<exists> e. e \<in> E \<and> tail G e = x \<and> head G e = z)\<longrightarrow> z = y)"
+proof(rule allI, rule impI)
+  fix z
+  assume "\<exists>e. e \<in> E \<and> tail G e = x \<and> head G e = z"
+  then obtain e1 where e1: "e1 \<in> E \<and> tail G e1 = x \<and> head G e1 = z " by auto
+  hence "e1 = e" using assms by(unfold dirBD_matching_def, auto) 
+  thus "z = y" using e1 assms  by(unfold dirBD_matching_def, auto)
+qed
+
+lemma unicity_E_head2:
+   assumes "dirBD_matching G X Y E \<and> e \<in> E \<and> tail G e = x \<and> head G e = y" 
+   shows  "(THE a. \<exists> e. e \<in> E \<and> tail G e = x \<and> head G e = a) = y" 
+proof-
+  have "e \<in> E \<and> tail G e = x \<and> head G e = y" using assms by auto
+  moreover
+  have  "(\<forall>z.(\<exists> e. e \<in> E \<and> tail G e = x \<and> head G e = z)\<longrightarrow> z = y)" 
+    using assms  unicity_E_head1[of G X Y E e x y] by auto
+  hence  "(\<And>z.(\<exists> e. e \<in> E \<and> tail G e = x \<and>  head G e = z) \<Longrightarrow> z = y)" by auto
+  ultimately
+  show ?thesis using the_equality by auto
+qed
+
+lemma  unicity_E_head:
+  assumes "dirBD_matching G X Y E \<and> e \<in> E \<and> tail G e = x \<and> head G e = y" 
+  shows "(E_head G E) x = y"
+  using assms unicity_E_head2[of G X Y E e x y] by(unfold E_head_def, auto)
+
+lemma E_head_image : 
+  "dirBD_perfect_matching G X Y E \<longrightarrow>  
+   (e \<in> E \<and> tail G e = x \<longrightarrow> (E_head G E) x = head G e)"
+proof
+  assume "dirBD_perfect_matching G X Y E" 
+  thus "e \<in> E \<and> tail G e = x \<longrightarrow> (E_head G E) x = head G e"
+    using dirBD_matching_tail_edge_unicity [of G X Y E] 
+    by (unfold E_head_def, unfold dirBD_perfect_matching_def, auto)
+qed
+
+lemma E_head_in_neighborhood:
+  "dirBD_matching G X Y E \<longrightarrow> e \<in> E \<longrightarrow> tail G e = x \<longrightarrow> 
+   (E_head G E) x \<in> neighborhood G x"
+proof (rule impI)+
+  assume 
+  dir_BDm: "dirBD_matching G X Y E" and ed: "e \<in> E" and hd: "tail G e = x"
+  show "E_head G E x \<in> neighborhood G x" 
+  proof- 
+    have  "(\<exists>y. y = head G e)" using hd by auto
+    then obtain y where y: "y = head G e" by auto
+    hence "(E_head G E) x = y" 
+      using dir_BDm ed hd unicity_E_head[of G X Y E e x y] 
+      by auto
+    moreover
+    have "e \<in> (arcs G)" using dir_BDm ed by(unfold dirBD_matching_def, auto)
+    hence "neighbor G y x" using ed hd y by(unfold neighbor_def, auto)
+    ultimately
+    show ?thesis using  hd ed by(unfold neighborhood_def, auto)
+  qed
+qed
+
+lemma dirBD_matching_inj_on:
+   "dirBD_perfect_matching G X Y E \<longrightarrow> inj_on (E_head G E) X"
+proof(rule impI)
+  assume dirBD_pm : "dirBD_perfect_matching G X Y E"
+  show "inj_on (E_head G E) X" 
+  proof(unfold inj_on_def)
+    show "\<forall>x\<in>X. \<forall>y\<in>X. E_head G E x = E_head G E y \<longrightarrow> x = y"
+    proof
+      fix x
+      assume 1: "x\<in> X"
+      show "\<forall>y\<in>X. E_head G E x = E_head G E y \<longrightarrow> x = y"
+      proof 
+        fix y
+        assume 2: "y\<in> X" 
+        show "E_head G E x = E_head G E y \<longrightarrow> x = y"
+        proof(rule impI)
+          assume same_eheads: "E_head G E x = E_head G E y" 
+          show "x=y"
+          proof- 
+            have hex: " (\<exists>!e \<in> E. tail G e = x)"
+              using dirBD_pm 1 Edge_unicity_in_dirBD_P_matching[of X G Y E] 
+              by auto
+            then obtain ex where hex1: "ex \<in> E \<and> tail G ex = x" by auto
+            have ey: " (\<exists>!e \<in> E. tail G e = y)" 
+              using  dirBD_pm 2 Edge_unicity_in_dirBD_P_matching[of X G Y E] 
+              by auto
+            then obtain ey where hey1: "ey \<in> E \<and> tail G ey = y" by auto
+            have ettx: "E_head G E x = head G ex"
+              using  dirBD_pm hex1 E_head_image[of G X Y E ex x] by auto
+            have etty: "E_head G E y = head G ey"
+              using  dirBD_pm hey1 E_head_image[of G X Y E ey y] by auto
+            have same_heads: "head G ex = head G ey" 
+              using same_eheads ettx etty by auto
+            hence same_edges: "ex = ey" 
+              using dirBD_pm 1 2 hex1 hey1 
+                    dirBD_matching_head_edge_unicity[of G X Y E]
+            by(unfold dirBD_perfect_matching_def,unfold dirBD_matching_def, blast)
+            thus ?thesis using  same_edges hex1 hey1 by auto
+          qed
+        qed
+      qed
+    qed
+  qed
+qed
+
 end
