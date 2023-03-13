@@ -28,13 +28,13 @@ definition heads:: "('a,'b) pre_digraph \<Rightarrow> 'a set" where
 definition heads_set:: "('a,'b) pre_digraph \<Rightarrow> 'b set \<Rightarrow> 'a set" where
    "heads_set G E \<equiv>  { head G e |e.  e \<in> E \<and> E \<subseteq> arcs G }"
 
-definition neighbor::  "('a,'b) pre_digraph \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> bool" where
-   "neighbor G v u  \<equiv>
+definition neighbour::  "('a,'b) pre_digraph \<Rightarrow> 'a \<Rightarrow> 'a \<Rightarrow> bool" where
+   "neighbour G v u  \<equiv>
    \<exists>e. e\<in> (arcs G) \<and> (( head G e = v \<and> tail G e = u) \<or>
    (head G e  = u \<and> tail G e = v))"
 
-definition neighborhood:: "('a,'b) pre_digraph \<Rightarrow> 'a  \<Rightarrow> 'a set" where
-   "neighborhood G v \<equiv> {u |u. neighbor G u v}"
+definition neighbourhood:: "('a,'b) pre_digraph \<Rightarrow> 'a  \<Rightarrow> 'a set" where
+   "neighbourhood G v \<equiv> {u |u. neighbour G u v}"
 
 definition bipartite_digraph:: "('a,'b) pre_digraph \<Rightarrow> 'a set \<Rightarrow> 'a set \<Rightarrow> bool" where
    "bipartite_digraph G X Y  \<equiv> 
@@ -49,7 +49,7 @@ definition dir_bipartite_digraph:: "('a,'b) pre_digraph \<Rightarrow> 'a set \<R
 definition K_E_bipartite_digraph:: "('a,'b) pre_digraph \<Rightarrow> 'a set \<Rightarrow> 'a set \<Rightarrow> bool" 
   where
   "K_E_bipartite_digraph G X Y \<equiv>
-  (dir_bipartite_digraph G X Y) \<and> (\<forall>x\<in>X.  finite (neighborhood G x))"
+  (dir_bipartite_digraph G X Y) \<and> (\<forall>x\<in>X.  finite (neighbourhood G x))"
 
 definition dirBD_matching:: "('a,'b) pre_digraph \<Rightarrow> 'a set \<Rightarrow> 'a set \<Rightarrow> 'b set \<Rightarrow> bool"
   where
@@ -180,13 +180,13 @@ proof
     by (unfold E_head_def, unfold dirBD_perfect_matching_def, auto)
 qed
 
-lemma E_head_in_neighborhood:
+lemma E_head_in_neighbourhood:
   "dirBD_matching G X Y E \<longrightarrow> e \<in> E \<longrightarrow> tail G e = x \<longrightarrow> 
-   (E_head G E) x \<in> neighborhood G x"
+   (E_head G E) x \<in> neighbourhood G x"
 proof (rule impI)+
   assume 
   dir_BDm: "dirBD_matching G X Y E" and ed: "e \<in> E" and hd: "tail G e = x"
-  show "E_head G E x \<in> neighborhood G x" 
+  show "E_head G E x \<in> neighbourhood G x" 
   proof- 
     have  "(\<exists>y. y = head G e)" using hd by auto
     then obtain y where y: "y = head G e" by auto
@@ -195,9 +195,9 @@ proof (rule impI)+
       by auto
     moreover
     have "e \<in> (arcs G)" using dir_BDm ed by(unfold dirBD_matching_def, auto)
-    hence "neighbor G y x" using ed hd y by(unfold neighbor_def, auto)
+    hence "neighbour G y x" using ed hd y by(unfold neighbour_def, auto)
     ultimately
-    show ?thesis using  hd ed by(unfold neighborhood_def, auto)
+    show ?thesis using  hd ed by(unfold neighbourhood_def, auto)
   qed
 qed
 

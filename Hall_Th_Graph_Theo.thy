@@ -13,40 +13,40 @@ definition dirBD_to_Hall::
    "('a,'b) pre_digraph ⇒ 'a set ⇒ 'a set ⇒ 'a set ⇒ ('a  ⇒ 'a set) ⇒ bool" 
    where 
    "dirBD_to_Hall G X Y I S ≡
-   dir_bipartite_digraph G X Y ∧ I = X ∧ (∀v∈I. (S v) = (neighborhood G v))"  
+   dir_bipartite_digraph G X Y ∧ I = X ∧ (∀v∈I. (S v) = (neighbourhood G v))"  
 
 theorem dir_BD_to_Hall: 
    "dirBD_perfect_matching G X Y E ⟶ 
-    system_representatives (neighborhood G) X (E_head G E)"
+    system_representatives (neighbourhood G) X (E_head G E)"
 proof(rule impI)
   assume dirBD_pm :"dirBD_perfect_matching G X Y E"
-  show "system_representatives (neighborhood G) X (E_head G E)"
+  show "system_representatives (neighbourhood G) X (E_head G E)"
   proof-
-    have wS : "dirBD_to_Hall G X Y X (neighborhood G)" 
+    have wS : "dirBD_to_Hall G X Y X (neighbourhood G)" 
     using dirBD_pm
     by(unfold dirBD_to_Hall_def,unfold dirBD_perfect_matching_def,
        unfold dirBD_matching_def, auto)
     have arc: "E ⊆ arcs G" using dirBD_pm 
       by(unfold dirBD_perfect_matching_def, unfold dirBD_matching_def,auto)
-    have a: "∀i. i ∈ X ⟶ E_head G E i ∈ neighborhood G i"
+    have a: "∀i. i ∈ X ⟶ E_head G E i ∈ neighbourhood G i"
     proof(rule allI)
       fix i
-      show "i ∈ X ⟶ E_head G E i ∈ neighborhood G i"
+      show "i ∈ X ⟶ E_head G E i ∈ neighbourhood G i"
       proof
         assume 1: "i ∈ X"
-        show "E_head G E i ∈ neighborhood G i"
+        show "E_head G E i ∈ neighbourhood G i"
         proof- 
           have 2: "∃!e ∈ E. tail G e = i"
           using 1 dirBD_pm Edge_unicity_in_dirBD_P_matching [of X G Y E ]
            by auto
           then obtain e where 3: "e ∈ E ∧ tail G e = i" by auto
-        thus "E_head G E i ∈ neighborhood G i"
-          using  dirBD_pm 1 3 E_head_in_neighborhood[of G X Y E e i]
+        thus "E_head G E i ∈ neighbourhood G i"
+          using  dirBD_pm 1 3 E_head_in_neighbourhood[of G X Y E e i]
           by (unfold dirBD_perfect_matching_def, auto)
         qed
       qed
     qed
-    thus "system_representatives (neighborhood G) X (E_head G E)"
+    thus "system_representatives (neighbourhood G) X (E_head G E)"
     using a dirBD_pm dirBD_matching_inj_on [of G X Y E] 
     by (unfold system_representatives_def, auto)
   qed
@@ -58,39 +58,39 @@ text‹ En esta sección formalizamos el Teorema de Hall versión grafos:
 ›
 
 lemma marriage_necessary_graph:
-  assumes "(dirBD_perfect_matching G X Y E)" and "∀i∈X. finite (neighborhood G i)"
-  shows "∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighborhood G ` J))"
+  assumes "(dirBD_perfect_matching G X Y E)" and "∀i∈X. finite (neighbourhood G i)"
+  shows "∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighbourhood G ` J))"
 proof(rule allI, rule impI)
   fix J
   assume hip1:  "J ⊆ X" 
-  show "finite J ⟶ card J ≤ card  (⋃ (neighborhood G ` J)) "
+  show "finite J ⟶ card J ≤ card  (⋃ (neighbourhood G ` J)) "
   proof  
     assume hip2: "finite J"
-    show  "card J ≤ card (⋃ (neighborhood G ` J))"
+    show  "card J ≤ card (⋃ (neighbourhood G ` J))"
     proof-
-      have  "∃R. (∀i∈X. R i ∈ neighborhood G i) ∧ inj_on R X"
+      have  "∃R. (∀i∈X. R i ∈ neighbourhood G i) ∧ inj_on R X"
         using assms  dir_BD_to_Hall[of G X Y E]
         by(unfold system_representatives_def, auto) 
-      thus ?thesis using assms(2)  marriage_necessity[of X "neighborhood G" ] hip1 hip2 by auto
+      thus ?thesis using assms(2)  marriage_necessity[of X "neighbourhood G" ] hip1 hip2 by auto
     qed
   qed
 qed
 
-lemma neighbor3:
+lemma neighbour3:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
   assumes "dir_bipartite_digraph G X Y" and "x∈X"
-  shows "neighborhood G x = {y |y. ∃e. e ∈ arcs G ∧ ((x = tail G e) ∧ (y = head G e))}" 
+  shows "neighbourhood G x = {y |y. ∃e. e ∈ arcs G ∧ ((x = tail G e) ∧ (y = head G e))}" 
 proof
-  show  "neighborhood G x ⊆ {y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e}"
+  show  "neighbourhood G x ⊆ {y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e}"
   proof
     fix z
-    assume hip:   "z ∈ neighborhood G x" 
+    assume hip:   "z ∈ neighbourhood G x" 
     show "z ∈ {y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e}"
     proof-
-      have  "neighbor G z x" using hip  by(unfold neighborhood_def, auto)  
+      have  "neighbour G z x" using hip  by(unfold neighbourhood_def, auto)  
       hence  "∃e. e ∈ arcs G ∧((z = (head G e) ∧ x =(tail G e) ∨ 
                              ((x = (head G e) ∧ z = (tail G e)))))" 
-        using assms  by (unfold neighbor_def, auto) 
+        using assms  by (unfold neighbour_def, auto) 
       hence  "∃e. e ∈ arcs G ∧ (z = (head G e) ∧ x =(tail G e))"
         using assms
         by(unfold dir_bipartite_digraph_def, unfold bipartite_digraph_def, unfold tails_def, blast)
@@ -98,18 +98,18 @@ proof
     qed
   qed
   next
-  show "{y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e} ⊆ neighborhood G x"
+  show "{y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e} ⊆ neighbourhood G x"
   proof
     fix z
     assume hip1: "z ∈ {y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e}"
-    thus  "z ∈ neighborhood G x" 
-      by(unfold neighborhood_def, unfold neighbor_def, auto)
+    thus  "z ∈ neighbourhood G x" 
+      by(unfold neighbourhood_def, unfold neighbour_def, auto)
   qed
 qed
 
 lemma perfect:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
-  assumes "dir_bipartite_digraph G X Y" and "system_representatives (neighborhood G) X R"
+  assumes "dir_bipartite_digraph G X Y" and "system_representatives (neighbourhood G) X R"
   shows  "tails_set G {e |e. e ∈ (arcs G) ∧ ((tail G e) ∈ X ∧ (head G e) = R(tail G e))} = X" 
 proof(unfold tails_set_def)
   let ?E = "{e |e. e ∈ (arcs G) ∧ ((tail G e) ∈ X ∧ (head G e) = R (tail G e))}"
@@ -134,10 +134,10 @@ proof(unfold tails_set_def)
       assume hip2: "x∈X"
       show "x∈{tail G e |e. e ∈ ?E ∧ ?E ⊆ arcs G}"
       proof-
-        have "R (x) ∈ neighborhood G x"
+        have "R (x) ∈ neighbourhood G x"
           using assms(2) hip2 by (unfold system_representatives_def, auto)
         hence "∃e. e∈ arcs G ∧ (x = tail G e ∧ R(x) = (head G e))" 
-          using assms(1) hip2 neighbor3[of G  X Y] by auto
+          using assms(1) hip2 neighbour3[of G  X Y] by auto
         moreover
         have  "?E ⊆ arcs G" by auto 
         ultimately show ?thesis
@@ -149,7 +149,7 @@ qed
 
 lemma dirBD_matching:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
-  assumes "dir_bipartite_digraph G X Y" and R: "system_representatives (neighborhood G) X R"
+  assumes "dir_bipartite_digraph G X Y" and R: "system_representatives (neighbourhood G) X R"
   and  "e1 ∈ arcs G ∧ tail G e1 ∈ X" and "e2 ∈ arcs G ∧ tail G e2 ∈ X" 
   and  "R(tail G e1) = head G e1" 
   and  "R(tail G e2) = head G e2"
@@ -174,7 +174,7 @@ proof
         assume **: "tail G e1 ≠ tail G e2"
         show  "head G e1 ≠ head G e2"
           using ** assms(3-6) R  inj_on_def[of R X] 
-          system_representatives_def[of "(neighborhood G)" X R] by auto
+          system_representatives_def[of "(neighbourhood G)" X R] by auto
       qed
     thus ?thesis using 3 by auto
   qed     
@@ -182,18 +182,18 @@ qed
 
 lemma marriage_sufficiency_graph:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
-  assumes "dir_bipartite_digraph G X Y"  and "∀i∈X. finite (neighborhood G i)"  
+  assumes "dir_bipartite_digraph G X Y"  and "∀i∈X. finite (neighbourhood G i)"  
   and "∃g. enumeration (g:: nat ⇒ 'a)" and  "∃h. enumeration (h:: nat ⇒ 'b)" 
   shows
-  "(∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighborhood G ` J))) ⟶
+  "(∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighbourhood G ` J))) ⟶
    (∃E. dirBD_perfect_matching G X Y E)"
 proof(rule impI)
-  assume hip: "∀J⊆X. finite J ⟶ card J ≤ card (⋃ (neighborhood G ` J))" 
+  assume hip: "∀J⊆X. finite J ⟶ card J ≤ card (⋃ (neighbourhood G ` J))" 
   show "∃E. dirBD_perfect_matching G X Y E"
   proof-
-    have "∃R. system_representatives (neighborhood G) X R" 
-      using assms(2-4) hip Hall[of X "neighborhood G"] by auto
-    then obtain R where R: "system_representatives (neighborhood G) X R" by auto
+    have "∃R. system_representatives (neighbourhood G) X R" 
+      using assms(2-4) hip Hall[of X "neighbourhood G"] by auto
+    then obtain R where R: "system_representatives (neighbourhood G) X R" by auto
     let ?E = "{e |e. e ∈ (arcs G) ∧ ((tail G e) ∈ X ∧ (head G e) = R (tail G e))}" 
     have "dirBD_perfect_matching G X Y ?E"
     proof(unfold dirBD_perfect_matching_def, rule conjI)
@@ -236,19 +236,19 @@ qed
 (* Graph version of Hall's Theorem *)
 theorem Hall_digraph:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set"
-  assumes "dir_bipartite_digraph G X Y"  and "∀i∈X. finite (neighborhood G i)"
+  assumes "dir_bipartite_digraph G X Y"  and "∀i∈X. finite (neighbourhood G i)"
   and  "∃g. enumeration (g:: nat ⇒ 'a)" and  "∃h. enumeration (h:: nat ⇒ 'b)" 
   shows "(∃E. dirBD_perfect_matching G X Y E) ⟷
-  (∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighborhood G ` J)))"
+  (∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighbourhood G ` J)))"
 proof
   assume hip1:  "∃E. dirBD_perfect_matching G X Y E"
-  show  "(∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighborhood G ` J)))"
+  show  "(∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighbourhood G ` J)))"
     using hip1 assms(1-2) marriage_necessary_graph[of G X Y] by auto 
 next
-  assume hip2: "∀J⊆X. finite J ⟶ card J ≤ card (⋃ (neighborhood G ` J))"
+  assume hip2: "∀J⊆X. finite J ⟶ card J ≤ card (⋃ (neighbourhood G ` J))"
   show "∃E. dirBD_perfect_matching G X Y E"  using assms  marriage_sufficiency_graph[of G X Y] hip2
   proof-
-    have "(∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighborhood G ` J))) ⟶ (∃E. dirBD_perfect_matching G X Y E)"
+    have "(∀J⊆X. finite J ⟶ (card J) ≤ card (⋃ (neighbourhood G ` J))) ⟶ (∃E. dirBD_perfect_matching G X Y E)"
       using assms  marriage_sufficiency_graph[of G X Y] by auto
     thus ?thesis using hip2 by auto
   qed

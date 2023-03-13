@@ -18,7 +18,7 @@ definition dirBD_to_Hall::
    "('a,'b) pre_digraph ⇒ 'a set ⇒ 'a set ⇒ 'a set ⇒ ('a  ⇒ 'a set) ⇒ bool" 
    where 
    "dirBD_to_Hall G X Y I S ≡
-   dir_bipartite_digraph G X Y ∧ I = X ∧ (∀v∈I. (S v) = (neighborhood G v))"  
+   dir_bipartite_digraph G X Y ∧ I = X ∧ (∀v∈I. (S v) = (neighbourhood G v))"  
 
 definition E_head :: "('a,'b) pre_digraph ⇒ 'b set  ⇒ ('a  ⇒ 'a)" 
   where
@@ -63,13 +63,13 @@ proof
     by (unfold E_head_def, unfold dirBD_perfect_matching_def, auto)
 qed
 
-lemma E_head_in_neighborhood:
+lemma E_head_in_neighbourhood:
   "dirBD_matching G X Y E ⟶ e ∈ E ⟶ tail G e = x ⟶ 
-   (E_head G E) x ∈ neighborhood G x"
+   (E_head G E) x ∈ neighbourhood G x"
 proof (rule impI)+
   assume 
   dir_BDm: "dirBD_matching G X Y E" and ed: "e ∈ E" and hd: "tail G e = x"
-  show "E_head G E x ∈ neighborhood G x" 
+  show "E_head G E x ∈ neighbourhood G x" 
   proof- 
     have  "(∃y. y = head G e)" using hd by auto
     then obtain y where y: "y = head G e" by auto
@@ -78,9 +78,9 @@ proof (rule impI)+
       by auto
     moreover
     have "e ∈ (arcs G)" using dir_BDm ed by(unfold dirBD_matching_def, auto)
-    hence "neighbor G y x" using ed hd y by(unfold neighbor_def, auto)
+    hence "neighbour G y x" using ed hd y by(unfold neighbour_def, auto)
     ultimately
-    show ?thesis using  hd ed by(unfold neighborhood_def, auto)
+    show ?thesis using  hd ed by(unfold neighbourhood_def, auto)
   qed
 qed
 
@@ -131,36 +131,36 @@ qed
 
 theorem dir_BD_to_Hall: 
    "dirBD_perfect_matching G X Y E ⟶ 
-    system_representatives (neighborhood G) X (E_head G E)"
+    system_representatives (neighbourhood G) X (E_head G E)"
 proof(rule impI)
   assume dirBD_pm :"dirBD_perfect_matching G X Y E"
-  show "system_representatives (neighborhood G) X (E_head G E)"
+  show "system_representatives (neighbourhood G) X (E_head G E)"
   proof-
-    have wS : "dirBD_to_Hall G X Y X (neighborhood G)" 
+    have wS : "dirBD_to_Hall G X Y X (neighbourhood G)" 
     using dirBD_pm
     by(unfold dirBD_to_Hall_def,unfold dirBD_perfect_matching_def,
        unfold dirBD_matching_def, auto)
     have arc: "E ⊆ arcs G" using dirBD_pm 
       by(unfold dirBD_perfect_matching_def, unfold dirBD_matching_def,auto)
-    have a: "∀i. i ∈ X ⟶ E_head G E i ∈ neighborhood G i"
+    have a: "∀i. i ∈ X ⟶ E_head G E i ∈ neighbourhood G i"
     proof(rule allI)
       fix i
-      show "i ∈ X ⟶ E_head G E i ∈ neighborhood G i"
+      show "i ∈ X ⟶ E_head G E i ∈ neighbourhood G i"
       proof
         assume 1: "i ∈ X"
-        show "E_head G E i ∈ neighborhood G i"
+        show "E_head G E i ∈ neighbourhood G i"
         proof- 
           have 2: "∃!e ∈ E. tail G e = i"
           using 1 dirBD_pm Edge_unicity_in_dirBD_P_matching [of X G Y E ]
            by auto
           then obtain e where 3: "e ∈ E ∧ tail G e = i" by auto
-        thus "E_head G E i ∈ neighborhood G i"
-          using  dirBD_pm 1 3 E_head_in_neighborhood[of G X Y E e i]
+        thus "E_head G E i ∈ neighbourhood G i"
+          using  dirBD_pm 1 3 E_head_in_neighbourhood[of G X Y E e i]
           by (unfold dirBD_perfect_matching_def, auto)
         qed
       qed
     qed
-    thus "system_representatives (neighborhood G) X (E_head G E)"
+    thus "system_representatives (neighbourhood G) X (E_head G E)"
     using a dirBD_pm dirBD_matching_inj_on [of G X Y E] 
     by (unfold system_representatives_def, auto)
   qed
@@ -185,24 +185,24 @@ definition SDR_bipartite_digraph::
     head = (λ(x,y). y)
     |)"
 
-lemma shows "∀i∈I.(neighborhood (SDR_bipartite_digraph S I)) (Inl i) = (type2 (S i))" 
+lemma shows "∀i∈I.(neighbourhood (SDR_bipartite_digraph S I)) (Inl i) = (type2 (S i))" 
 proof
   fix i
   assume Hip: "i ∈ I"
-  show "neighborhood (SDR_bipartite_digraph S I) (Inl i) = type2 (S i)"
+  show "neighbourhood (SDR_bipartite_digraph S I) (Inl i) = type2 (S i)"
   proof
     let ?G = "(SDR_bipartite_digraph S I)"
-    show "neighborhood ?G (Inl i) ⊆ type2 (S i)"  
+    show "neighbourhood ?G (Inl i) ⊆ type2 (S i)"  
     proof
       fix x
-      assume hip: "x ∈ neighborhood ?G (Inl i)"
+      assume hip: "x ∈ neighbourhood ?G (Inl i)"
       show "x ∈ type2 (S i)" 
       proof-
-        have "neighbor ?G x (Inl i)"
-          using hip by(unfold neighborhood_def, unfold SDR_bipartite_digraph_def, auto)
+        have "neighbour ?G x (Inl i)"
+          using hip by(unfold neighbourhood_def, unfold SDR_bipartite_digraph_def, auto)
         hence "∃e. e∈ (arcs ?G) ∧ ((head ?G e =  x ∧ tail ?G e = (Inl i)) ∨
               (head ?G e  = (Inl i) ∧ tail ?G e =  x))"
-          by(unfold neighbor_def, auto)
+          by(unfold neighbour_def, auto)
         then obtain e where e: "e ∈ (arcs ?G) ∧ (( head ?G e = x ∧ tail ?G e = (Inl i)) ∨
              (head ?G e  = (Inl i) ∧ tail ?G e =  x))" by auto
         hence "e ∈ (arcs ?G)" by auto
@@ -217,11 +217,11 @@ proof
       qed
     qed
     next 
-    show "type2 (S i) ⊆ neighborhood (SDR_bipartite_digraph S I) (Inl i)"
+    show "type2 (S i) ⊆ neighbourhood (SDR_bipartite_digraph S I) (Inl i)"
     proof
       fix x:: "'a + 'b"
       assume hip:  "x ∈ type2 (S i)"
-      show  "x ∈ neighborhood (SDR_bipartite_digraph S I) (Inl i)"
+      show  "x ∈ neighbourhood (SDR_bipartite_digraph S I) (Inl i)"
       proof-
         have "∃ w. x = (Inr w) ∧ w ∈ (S i)" using hip 
           by(unfold type2_def, auto)
@@ -230,7 +230,7 @@ proof
         hence "((Inl i), x ) ∈ (arcs (SDR_bipartite_digraph S I))" 
           using hip by(unfold SDR_bipartite_digraph_def, auto) 
         thus ?thesis
-          by(unfold  neighborhood_def,unfold neighbor_def,unfold SDR_bipartite_digraph_def, auto)  
+          by(unfold  neighbourhood_def,unfold neighbour_def,unfold SDR_bipartite_digraph_def, auto)  
       qed
     qed
   qed
@@ -705,7 +705,7 @@ definition S_representative::
  "('a ⇒ 'b set) ⇒ 'a set ⇒ ('a ⇒ 'b) ⇒ ('a,'b) type_representative" 
  where
  "S_representative S I R ≡ 
-    (| sets  = (neighborhood (SDR_bipartite_digraph S I)),
+    (| sets  = (neighbourhood (SDR_bipartite_digraph S I)),
     indices =  (tails (SDR_bipartite_digraph S I)),
     funcion = (E_head (SDR_bipartite_digraph S I) {type3 i (R i) |i. i ∈ I})  
     |)"
@@ -795,7 +795,7 @@ proof(rule impI, unfold S_system_representatives_def)
   let ?X = "(set_tail (S_coverage S I R))"
   let ?Y = "(set_head (S_coverage S I R))"
   let ?E = "(set_arcs (S_coverage S I R))"
-  have 1: "(sets (S_representative S I R)) = (neighborhood ?G)"
+  have 1: "(sets (S_representative S I R)) = (neighbourhood ?G)"
     by(unfold S_representative_def, unfold S_coverage_def, simp)
   have 2: "(indices (S_representative S I R)) = ?X" 
     using assms No_vacios_conjuntos[of S I R]
@@ -804,7 +804,7 @@ proof(rule impI, unfold S_system_representatives_def)
     by(unfold S_representative_def, unfold S_coverage_def, unfold E_head_def, simp)
   have dirBD_pm: "(dirBD_perfect_matching ?G ?X ?Y ?E)"  using hip 
     by (unfold S_perfect_matching_def, auto)
-  hence wS : "dirBD_to_Hall ?G ?X ?Y ?X (neighborhood ?G)" 
+  hence wS : "dirBD_to_Hall ?G ?X ?Y ?X (neighbourhood ?G)" 
     by(unfold dirBD_to_Hall_def,unfold dirBD_perfect_matching_def,
        unfold dirBD_matching_def, auto)
   have 3:  "(funcion (S_representative S I R)) = (E_head ?G ?E)" 
@@ -812,30 +812,30 @@ proof(rule impI, unfold S_system_representatives_def)
   show "system_representatives (sets (S_representative S I R))
         (indices (S_representative S I R)) (funcion (S_representative S I R))"  
   proof-
-    have "system_representatives (neighborhood ?G) ?X (E_head ?G ?E)"
+    have "system_representatives (neighbourhood ?G) ?X (E_head ?G ?E)"
     proof-
       have arc: "?E ⊆ arcs ?G"
         using dirBD_pm 
         by(unfold dirBD_perfect_matching_def, unfold dirBD_matching_def, auto)
-      have a: "∀i. i ∈ ?X ⟶ E_head ?G ?E i ∈ neighborhood ?G i"
+      have a: "∀i. i ∈ ?X ⟶ E_head ?G ?E i ∈ neighbourhood ?G i"
       proof(rule allI)
         fix i
-        show "i ∈ ?X ⟶ E_head ?G ?E i ∈ neighborhood ?G i"
+        show "i ∈ ?X ⟶ E_head ?G ?E i ∈ neighbourhood ?G i"
         proof
           assume 1: "i ∈ ?X"
-          show "E_head ?G ?E i ∈ neighborhood ?G i"
+          show "E_head ?G ?E i ∈ neighbourhood ?G i"
           proof- 
             have 2: "∃!e ∈ ?E. tail ?G e = i"
               using 1 dirBD_pm Edge_unicity_in_dirBD_P_matching [of ?X ?G ?Y ?E ]
               by auto
             then obtain e where 3: "e ∈ ?E ∧ tail ?G e = i" by auto
-            thus "E_head ?G ?E i ∈ neighborhood ?G i"
-            using  dirBD_pm 1 3 E_head_in_neighborhood[of ?G ?X ?Y ?E e i]
+            thus "E_head ?G ?E i ∈ neighbourhood ?G i"
+            using  dirBD_pm 1 3 E_head_in_neighbourhood[of ?G ?X ?Y ?E e i]
             by (unfold dirBD_perfect_matching_def, auto)
           qed
         qed
       qed
-      thus "system_representatives (neighborhood ?G) ?X (E_head ?G ?E)"
+      thus "system_representatives (neighbourhood ?G) ?X (E_head ?G ?E)"
         using a dirBD_pm dirBD_matching_inj_on [of ?G ?X ?Y ?E] 
         by (unfold system_representatives_def, auto)
     qed
@@ -852,7 +852,7 @@ proof(rule impI,  unfold S_perfect_matching_def, unfold dirBD_perfect_matching_d
   let ?X = "(set_tail (S_coverage S I R))"
   let ?Y = "(set_head (S_coverage S I R))"
   let ?E = "(set_arcs (S_coverage S I R))"
-  have 1: "(sets (S_representative S I R)) = (neighborhood ?G)"
+  have 1: "(sets (S_representative S I R)) = (neighbourhood ?G)"
     by(unfold S_representative_def, unfold S_coverage_def, simp)
   have 2: "(indices (S_representative S I R)) = ?X"
     using assms No_vacios_conjuntos[of S I R] 
@@ -870,25 +870,25 @@ shows "(S_perfect_matching S I R) ⟶ (S_system_representatives S I R)" and
       "(system_representatives S I R) ⟶ (S_perfect_matching S I R)" 
   using assms  dir_BD_to_Hall1[of S I R]  Hall_to_dir_BD1 by auto
 
-(* Los siguientes tres lemas no se requieren en la formalización *)
-lemma neighbor:
+(* Next three lemmas are not required in the formalisation *)
+lemma neighbour:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
   assumes "dir_bipartite_digraph G X Y"  and "(tail G e) ∈ X " and "e ∈ arcs G"
   shows  "(head G e)∈ Y" 
   using assms by(unfold dir_bipartite_digraph_def, unfold bipartite_digraph_def, auto)
 
-lemma neighbor1:
+lemma neighbour1:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
   assumes "dir_bipartite_digraph G X Y" and "(tail G e) ∈ X" and "e ∈ arcs G" 
-  shows "neighborhood G (tail G e) ⊆ Y" 
+  shows "neighbourhood G (tail G e) ⊆ Y" 
 proof
   fix x
-  assume hip:  "x ∈ neighborhood G (tail G e)"
+  assume hip:  "x ∈ neighbourhood G (tail G e)"
   show "x ∈ Y"
   proof-
     have "∃e1. e1 ∈ arcs G ∧ ((x = (head G e1) ∧ (tail G e) = (tail G e1)) ∨ 
                              ((x = (tail G e1) ∧ (tail G e) = (head G e1))))" 
-      using assms hip  by (unfold neighborhood_def, unfold neighbor_def, auto)
+      using assms hip  by (unfold neighbourhood_def, unfold neighbour_def, auto)
     then obtain e1  where e1: "e1 ∈ arcs G ∧ ((x = (head G e1) ∧ (tail G e) = (tail G e1)) ∨ 
                              ((x = (tail G e1) ∧ (tail G e) = (head G e1))))"
       by auto
@@ -898,7 +898,7 @@ proof
     thus ?thesis
     proof(rule disjE)
       assume "e1 ∈ arcs G ∧ x = head G e1 ∧ tail G e = tail G e1"
-      thus ?thesis using assms(1-2) neighbor by auto
+      thus ?thesis using assms(1-2) neighbour by auto
       next
       assume * : "e1 ∈ arcs G ∧ x = tail G e1 ∧ tail G e = head G e1"
       show  " x ∈ Y"
@@ -910,7 +910,7 @@ proof
           have  "(tail G e1) ∈ tails G"  using  assms(1) e1 dir_bipartite_digraph_def[of G X Y] 
           by(unfold tails_def, auto)
           hence  "x∈X" using a  using assms(1) by(unfold dir_bipartite_digraph_def, auto)
-          hence "head G e1 ∈ Y"  using e1 assms neighbor by auto
+          hence "head G e1 ∈ Y"  using e1 assms neighbour by auto
           hence "tail G e ∈ Y" using * by auto    
           thus ?thesis using assms(1-2) 
             by(unfold dir_bipartite_digraph_def, unfold bipartite_digraph_def, auto)
@@ -920,27 +920,27 @@ proof
   qed
 qed
 
-lemma neighbor2:
+lemma neighbour2:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
   assumes "dir_bipartite_digraph G X Y" and "x∈X"
   shows "∃e.∃y. e ∈ arcs G ∧ ((x = tail G e) ∧ (y = head G e))" 
   using assms by(unfold dir_bipartite_digraph_def, unfold bipartite_digraph_def, unfold tails_def, auto)
 
-lemma neighbor3:
+lemma neighbour3:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
   assumes "dir_bipartite_digraph G X Y" and "x∈X"
-  shows "neighborhood G x = {y |y. ∃e. e ∈ arcs G ∧ ((x = tail G e) ∧ (y = head G e))}" 
+  shows "neighbourhood G x = {y |y. ∃e. e ∈ arcs G ∧ ((x = tail G e) ∧ (y = head G e))}" 
 proof
-  show  "neighborhood G x ⊆ {y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e}"
+  show  "neighbourhood G x ⊆ {y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e}"
   proof
     fix z
-    assume hip:   "z ∈ neighborhood G x" 
+    assume hip:   "z ∈ neighbourhood G x" 
     show "z ∈ {y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e}"
     proof-
-      have  "neighbor G z x" using hip  by(unfold neighborhood_def, auto)  
+      have  "neighbour G z x" using hip  by(unfold neighbourhood_def, auto)  
       hence  "∃e. e ∈ arcs G ∧((z = (head G e) ∧ x =(tail G e) ∨ 
                              ((x = (head G e) ∧ z = (tail G e)))))" 
-        using assms  by (unfold neighbor_def, auto) 
+        using assms  by (unfold neighbour_def, auto) 
       hence  "∃e. e ∈ arcs G ∧ (z = (head G e) ∧ x =(tail G e))"
         using assms
         by(unfold dir_bipartite_digraph_def, unfold bipartite_digraph_def, unfold tails_def, blast)
@@ -948,18 +948,18 @@ proof
     qed
   qed
   next
-  show "{y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e} ⊆ neighborhood G x"
+  show "{y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e} ⊆ neighbourhood G x"
   proof
     fix z
     assume hip1: "z ∈ {y |y. ∃e. e ∈ arcs G ∧ x = tail G e ∧ y = head G e}"
-    thus  "z ∈ neighborhood G x" 
-      by(unfold neighborhood_def, unfold neighbor_def, auto)
+    thus  "z ∈ neighbourhood G x" 
+      by(unfold neighbourhood_def, unfold neighbour_def, auto)
   qed
 qed
 
 lemma perfect:
   fixes  G :: "('a, 'b) pre_digraph" and X:: "'a set" 
-  assumes "dir_bipartite_digraph G X Y" and "system_representatives (neighborhood G) X R"
+  assumes "dir_bipartite_digraph G X Y" and "system_representatives (neighbourhood G) X R"
   shows  "tails_set G {e |e. e ∈ (arcs G) ∧ ((tail G e) ∈ X ∧ (head G e) = R(tail G e))} = X" 
 proof(unfold tails_set_def)
   let ?E = "{e |e. e ∈ (arcs G) ∧ ((tail G e) ∈ X ∧ (head G e) = R (tail G e))}"
@@ -984,10 +984,10 @@ proof(unfold tails_set_def)
       assume hip2: "x∈X"
       show "x∈{tail G e |e. e ∈ ?E ∧ ?E ⊆ arcs G}"
       proof-
-        have "R (x) ∈ neighborhood G x"
+        have "R (x) ∈ neighbourhood G x"
           using assms(2) hip2 by (unfold system_representatives_def, auto)
         hence "∃e. e∈ arcs G ∧ (x = tail G e ∧ R(x) = (head G e))" 
-          using assms(1) hip2 neighbor3[of G  X Y] by auto
+          using assms(1) hip2 neighbour3[of G  X Y] by auto
         moreover
         have  "?E ⊆ arcs G" by auto 
         ultimately show ?thesis
