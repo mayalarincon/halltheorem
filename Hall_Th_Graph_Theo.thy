@@ -254,16 +254,16 @@ qed
 
 (* Feedback from and to LPAR 2023 -  reviewer on "best proofs" 
 Although short proofs are of interest regarding the increment of the grade of
-automation of proof assistants, it should be noticed that, nowadays, such 
-proofs could be obtained just applying hammers. But our central aims, as 
-Professors involved in the education of mathematicians, include the vital 
-interests of generating proofs that provide feedback on the importance of
+automation of proof assistants, it should be noted that, nowadays, such 
+proofs could be obtained just by applying hammers. But our central aims, as 
+Professors involved in the education of mathematicians include a vital 
+interest in generating proofs that provide feedback on the importance of
 proof assistants for the profession of a mathematician. We work hard to 
-convince advanced mathematician students as well as our colleagues to use 
+convince advanced mathematician students and our colleagues to use 
 proof assistants. From this perspective, having an automatically generated
 one-step proof is not advantageous. Below, we include the specification 
 provided by the reviewer and show how short proofs can be obtained through 
-application of the Isabelle Slederhammer, providing in contrast full detailed
+the application of the Isabelle Sledgehammer, providing, in contrast, complete detailed
 proofs, those that are most convenient for our primary educational purposes. 
 *)
 
@@ -303,14 +303,14 @@ locale matching = bipartite_digraph +
 locale perfect_matching = matching +
   assumes M_perfect: "fst ` M = X"
 
-(* Regarding the above-style of specification, it is clear that
+(* Regarding the above style of specification, it is clear that
 some basic concepts related to Graph Theory are not visible to
-the specifier: vertex, edge, whether the left- and right- hand
+the specifier: vertex, edge, whether the left- and right-hand
 side sets of vertexes of a bipartite digraph may or not be 
-disjunct, etc.  Questions related to types may arise such as 
-sets of type "a" and sets of type "b" are different classes 
-only nominally, that is only because different type names "a"
-and "b" are used. 
+disjunct, etc.  Questions related to types may arise, such as 
+whether sets of type "a" and sets of type "b" are different classes 
+only nominally, that is only because the type names "a"
+and "b" are other.  
 *) 
 
 (* Formalization of a perfect matching associated to an sdr in indexed families of sets *)
@@ -344,7 +344,7 @@ theorem  (in Count_Nbhdfin_bipartite_digraph) Hall_Graph:
                                  Ms)) 
   \<Longrightarrow>
        (\<exists>M.  perfect_matching X Y E M)"
-(* At this point, the Sledgerhammer can be applied, and several proofs
+(* At this point, the Sledgehammer can be applied, and several proofs
 will be proposed. For instance:
 "zipperposition": Try this: using Countable_Tails by blast (2 ms) 
 "e": Try this: using Countable_Tails by blast (19 ms) 
