@@ -4,9 +4,9 @@ theory Hall_Theorem
 imports
   Main
 (*  "/Users/thaynaradelima/Dropbox/ResumenHallIngles/afp-2022-04-22/thys/Marriage/Marriage"
- "TeoriaCompacidadIngles"*)
+ "TeoriaCompacidadIngles"   >>>  Use Marriage.Marriage if AFP locally available <<< *)
  "/Users/ayala/Dropbox/ResumenHallIngles/afp-2022-04-22/thys/Marriage/Marriage"
- "Compacteness"
+ "Compactness"
 begin
 
 definition system_representatives :: "('a \<Rightarrow> 'b set) \<Rightarrow> 'a set \<Rightarrow> ('a \<Rightarrow> 'b) \<Rightarrow> bool" where

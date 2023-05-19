@@ -1,7 +1,7 @@
 (*<*) 
 theory KoenigLemma
  imports Main
-"Compacteness"  
+"Compactness"  
 begin
 (*>*)
 section \<open> König's Lemma Theory \<close>

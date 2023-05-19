@@ -1,7 +1,7 @@
 (* De Bruijn - Erdös  k-colouring theorem *)
 
 theory k_coloring
-imports Main Compacteness
+imports Main Compactness
 begin
 
  
