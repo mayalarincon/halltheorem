@@ -286,8 +286,11 @@ locale bipartite_digraph =
   assumes E_subset: "E ⊆ X × Y"
 
 (* Our specification in the spirit of locales following the reviewer's
-suggestion of a bipartite digraph with a countable set of left-hand 
-side vertexes X, whose neighborhoods are also finite sets *)
+suggestion of a bipartite digraph with a "countable" set of left-hand 
+side vertexes X, whose neighborhoods are also finite sets.
+But you should notice that instead "countable", the specified notion
+of enumerability was given as "enumerable".  So the Countable predicate 
+below is not interpretate.  *)
 locale Count_Nbhdfin_bipartite_digraph = bipartite_digraph +
   assumes Countable_Tails: "countable X"
   assumes Nbhd_Tail_finite: "finite {y. (x, y) ∈ E}"
@@ -428,7 +431,7 @@ proof unfold_locales
   have P : "perfect_matching X Y E {(x, repr x)|x. x ∈ X}"
   proof
     show  "{(x, repr x) |x. x ∈ X} ⊆ E"
-      using O Countable_Tails 
+      using O Countable_Tails   (* Notice the inclusion of the undefined predicate Countable *)
             matching.M_subset [of X "(⋃i∈X.(λx. {y. (x,y) ∈ E}) i)" "E" "{(x, repr x) |x. x ∈ X}"]
       by auto
     show "⋀x y y'. (x, y) ∈ {(x, repr x) |x. x ∈ X} ⟹ (x, y') ∈ {(x, repr x) |x. x ∈ X} ⟹ y = y'"
